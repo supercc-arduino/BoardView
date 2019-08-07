@@ -57,7 +57,7 @@ Dans BoardView.h, BoardView.cpp se trouve la classe BoardView.
 
 Définir un protocole de commande en soit n'a pas de sens, il est spécifique à chaque application.
 
-Pour ce premier exemple nous utiliserons une petite application de type chronomètre destinée à tester l'interractivité offerte par la web socket (esp8266).
+Pour ce premier exemple nous utiliserons une petite application de type chronomètre destinée à tester l'interactivité offerte par la web socket (esp8266).
 
 On souhaie plus précisément voir la valeur du chronomètre (chrono de type float), pouvoir démarrer/arrêter le chronomètre (variable startStop) et enfin disposer d'un bouton clear.  
 
@@ -70,15 +70,20 @@ Sachant cela on peut définir les commandes du protocole :
 Voila ce que cela donne en  C avec les fonctions utilitaires :
 
 
-Définissons maintenant la vue graphique. Pour cela nous devons configurer un objet de type BoardView, lui associer notre fonction de décodage de protocole et définir l'apparence de la page Web associée aux variables. Ici c'est très basique :
+Ajoutons maintenant la vue graphique. Pour cela nous devons configurer un objet de type BoardView, lui associer notre fonction de décodage de protocole et définir l'apparence de la page Web associée aux variables. Ici c'est très basique :
 On veut un champ montrant le chrono, une checkbox pour startStop et un bouton clear.
 
+Le code complet de l'exemple. Adaptez le ssid et le mot de passe.
+
+```
 
 
 ```
 
+Une fois téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte : ``Wifi : IP  addr : 192.168.1.X``
 
-```
+Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez sur la page principale proposant une console (réseau) et la vue définie.
+
 
 
 ## Second exemple
