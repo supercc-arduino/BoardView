@@ -2,9 +2,9 @@
 
 __En cours de construction - pas de code dispo pour l'instant__
 
-La ligne directrice de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à tous ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maitriser complètement les aspects techniques des protocoles réseaux utilisés (HTTP, WebSocket, TCP ici). 
+L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à tous ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maitriser complètement les aspects techniques des protocoles réseaux utilisés (HTTP, WebSocket, TCP ici). 
 
-Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interractive via l'usage d'une web socket) ou (bientot !) via une connexion TCP (pour l'automatisation du pilotage/controle des cartes avec d'autres programmes (scripts, Ruby, ...). 
+Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interractive via l'usage d'une web socket) et/ou (bientot !) via une connexion TCP (pour l'automatisation du pilotage/controle des cartes avec d'autres programmes (scripts, Ruby, ...). 
 
 Via le navigateur web il est possible :
   * d'obtenir une console réseau (similaire à la console de l'IDE arduino)
@@ -37,7 +37,7 @@ La vue de la carte est une page web ou les variables (de la carte) peuvent être
   * CheckBox : permet de lancer des commandes si activée/désactivé
   * Button : permet de lancer des commandes
   
- Un aperçu de la vue de l'exemple n°1 :
+Un aperçu de la vue de l'exemple n°1 :
  
  <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/view-chrono.jpg" width="320"> 
  
@@ -68,7 +68,7 @@ Une autre particularité liée aux claviers virtuels qui ont tendance à mettre 
 
 Le noeud destinataire d'une commande construira la réponse, également sous la forme d'une unique ligne, qu'il retournera à l'émetteur de la commande. Cela peut être un résultat, ou juste l'information que la commande s'est correctement déroulée ("ok") ou pas ("erreur : code ou message...")
 
-La première (et éventuellement la seule) commande que doit être capable d'interpréte un noeud est la commande :
+La première (et éventuellement la seule) commande que doit être capable d'interpréter un noeud est la commande :
 
 ``dump``
 
