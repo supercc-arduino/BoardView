@@ -35,7 +35,7 @@ La vue de la carte est une page web ou les variables (de la carte) peuvent être
   
  Un aperçu de la vue de l'exemple n°1 :
  
- <img src="view-chrono.png" width="320"> 
+ <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/view-chrono.jpg" width="320"> 
  
  
 ## Le protocole de communication 
