@@ -26,7 +26,7 @@ Pré requis pour faire fonctionner les exemples :
   
 ## La vue
 
-La vue de la carte est une page web ou les variables (de la carte) peuvent être consultées et/ou modifier et disposant éventuellement de boutons émettant des commandes. Les widgets disponibles pour l'instant sont minimalistes :
+La vue de la carte est une page web ou les variables (de la carte) peuvent être consultées et/ou modifiées et disposant éventuellement de boutons émettant des commandes. Les widgets disponibles pour l'instant sont minimalistes :
 
   * Label : pour visualiser uniquement un couple varName=value
   * Entry : comme Label mais si on clic dessus un popup permet de modifier la valeur.
@@ -35,7 +35,7 @@ La vue de la carte est une page web ou les variables (de la carte) peuvent être
   
  Un aperçu de la vue de l'exemple n°1 :
  
- ![Screenshot](view-chrono.jpg | width=800) 
+ <img src="https://github.com/supercc-arduino/BoardView/blob/master/websock.jpg" width="800"> 
  
  
 ## Le protocole de communication 
