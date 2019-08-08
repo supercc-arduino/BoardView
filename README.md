@@ -33,7 +33,7 @@ Ou (à cause du signe = difficilement accessible à partir d'un clavier virtuel 
 
 Une autre particularité liée aux claviers virtuels qui ont tendance à mettre en majuscule la première lettre de la commande, est qu'une commande verra automatiquement sa première lettre passée en minuscule (un effet de bord est qu'il ne sera pas possible d'affecter la valeur aux variables dont le nom commence par une majuscule, mais qui met une majuscule à ses noms de variables ?, qui ?).
 
-Le noeud destinataire d'une commande construira la réponse, également sous la forme d'une unique ligne, qu'il retournera à l'émetteur de la commande. Cela peut être un résultat, ou juste l'information que la commande s'est correctement déroulé ("ok") ou pas ("erreur : code ou message...")
+Le noeud destinataire d'une commande construira la réponse, également sous la forme d'une unique ligne, qu'il retournera à l'émetteur de la commande. Cela peut être un résultat, ou juste l'information que la commande s'est correctement déroulée ("ok") ou pas ("erreur : code ou message...")
 
 La première (et éventuellement la seule) commande que doit être capable d'interpréte un noeud est la commande :
 
@@ -51,7 +51,7 @@ C'est tout pour la théorie, place à la pratique ;-)
 
 Intégrez les fichiers BoardViewProto.h, BoardViewProto.cpp, BoardView.h, BoardView.cpp à votre projet.
 
-Dans BoardViewProto.h, BoardViewProto.cpp se trouvent les définitions de fonctions utilitaires de codage/décodage des commandes (en C, sans String, adaptée aux petites architectures). Ces fonctions sont utilisée dans la fonction parseRequest.
+Dans BoardViewProto.h, BoardViewProto.cpp se trouvent les définitions de fonctions utilitaires de codage/décodage des commandes (en C, sans String, adaptées aux petites architectures). Ces fonctions sont utilisées dans la fonction parseRequest.
 
 Dans BoardView.h, BoardView.cpp se trouve la classe BoardView.
 
@@ -64,11 +64,10 @@ On souhaie plus précisément voir la valeur du chronomètre (chrono de type flo
 Sachant cela on peut définir les commandes du protocole :
 
   * dump : récupérer les valeurs des variables. Réponse de la forme : "chrono=0.000; startStop=0"
-  * On veut pouvoir modifier startStop donc il faudra interpréter les commandes chrono=0.000; startStop=0...
-  * on veut une commande clear arrêtant le compteur. 
+  * On veut pouvoir modifier startStop donc il faudra interpréter les commandes chrono=...; startStop=0...
+  * on veut une commande clear arrêtant et réinitialisant le compteur. 
 
 Voila ce que cela donne en  C avec les fonctions utilitaires :
-
 
 Ajoutons maintenant la vue graphique. Pour cela nous devons configurer un objet de type BoardView, lui associer notre fonction de décodage de protocole et définir l'apparence de la page Web associée aux variables. Ici c'est très basique :
 On veut un champ montrant le chrono, une checkbox pour startStop et un bouton clear.
@@ -80,7 +79,7 @@ Le code complet de l'exemple. Adaptez le ssid et le mot de passe.
 
 ```
 
-Une fois téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte : ``Wifi : IP  addr : 192.168.1.X``
+Une fois le programme téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte : ``Wifi : IP  addr : 192.168.1.X``
 
 Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez sur la page principale proposant une console (réseau) et la vue définie.
 
@@ -92,3 +91,10 @@ BoardView peut également servir de pont entre un projet arduino sans capacité 
 
 Schéma des branchements :
 
+Code sur la nano (chrono) :
+
+Code sur le d1-mini (juste en mode "pont" web socket <-> Serial)
+
+
+Quelques remarques :
+  * la liaison série étant monopolisée des 2 cotés 
