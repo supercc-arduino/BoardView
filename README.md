@@ -1,6 +1,6 @@
 # BoardView
 
-__En cours de construction - pas de code dispo pour l'instant
+__En cours de construction - pas de code dispo pour l'instant__
 
 BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interractive via l'usage d'une web socket) ou (bientot !) via une connexion TCP (pour l'automatisation du pilotage/controle des cartes avec d'autres programmes (scripts, Ruby, ...). 
 
@@ -16,10 +16,18 @@ Dans l'image ci-dessous le d1-mini de sert que de pont vers un arduino (nano ici
 
 ![Screenshot](websock.jpg) 
 
+## Installation
+
+Pré requis pour faire fonctionner les exemples :
+
+  * Avoir installé la chaine de compilation pour votre Esp (voir par exemple [ici](https://github.com/esp8266/Arduino)
+  * Avoir installé la bibliothèque "Web Sockets" de Markus Sattler (version 2.\*) (via le menu "Outils -> Gérer les bibliothèques" par exemple).
+  * Avoir téléchargé et installé le ZIP de BoardView (en appliquant la procédure décrite par exemple [ici](https://www.robot-maker.com/ouvrages/tuto-arduino/bibliotheque-arduino/).
+  
 
 ## Le protocole de communication 
 
-A base de commandes donc. Une commande est de la forme :
+BoardView est conçu pour des échanges à base de commandes. Une commande est de la forme :
 
 ``cmd arg1 arg2 ... argN``
 
@@ -49,25 +57,64 @@ C'est tout pour la théorie, place à la pratique ;-)
 
 ## Premier exemple
 
-Intégrez les fichiers BoardViewProto.h, BoardViewProto.cpp, BoardView.h, BoardView.cpp à votre projet.
-
-Dans BoardViewProto.h, BoardViewProto.cpp se trouvent les définitions de fonctions utilitaires de codage/décodage des commandes (en C, sans String, adaptées aux petites architectures). Ces fonctions sont utilisées dans la fonction parseRequest.
-
-Dans BoardView.h, BoardView.cpp se trouve la classe BoardView.
-
-Définir un protocole de commande en soit n'a pas de sens, il est spécifique à chaque application.
-
 Pour ce premier exemple nous utiliserons une petite application de type chronomètre destinée à tester l'interactivité offerte par la web socket (esp8266).
 
 On souhaie plus précisément voir la valeur du chronomètre (chrono de type float), pouvoir démarrer/arrêter le chronomètre (variable startStop) et enfin disposer d'un bouton clear.  
 
 Sachant cela on peut définir les commandes du protocole :
 
-  * dump : récupérer les valeurs des variables. Réponse de la forme : "chrono=0.000; startStop=0"
-  * On veut pouvoir modifier startStop donc il faudra interpréter les commandes chrono=...; startStop=0...
-  * on veut une commande clear arrêtant et réinitialisant le compteur. 
+  * dump : récupérer les valeurs des variables. Réponse de la forme : "chrono=XXX; startStop=XXX"
+  * On veut pouvoir modifier ``startStop`` donc il faudra interpréter les commandes de la forme ``chrono=...`` et  `` startStop=...``
+  * on veut une commande ``clear`` arrêtant et réinitialisant le compteur. 
 
-Voila ce que cela donne en  C avec les fonctions utilitaires :
+Voila ce que cela donne en  C avec les [fonctions utilitaires]( :
+
+```
+// mini interpréteur de commandes simples de la forme :
+// command arg1 arg2 ...
+// variable=valeur
+
+int parseRequest(char *request, char *response, unsigned len) {
+	int ret=0; // code de retour 0 : ok, sinon code d'erreur.
+	
+	response[0]=0; //clear response
+	
+	// lowercase first letter (for smartphone keyboard)
+	if(request[0]>='A' && request[0]<='Z') request[0]=request[0]+'a'-'A';
+
+	// On utilise les fonctions utilitaires de codage/décodage d'une commande
+	
+	// commande dump
+	// La commande dump doit retourner dans la variable response la liste des
+	// couple varName=value que la carte souhaite exposer en lecture seule à 
+	// l'extérieur.
+	
+	if(matchCmd(request,"dump")) {
+		// On ajoute toutes les variables que l'on souhaite rendre visibles
+		// L'ordre n'a pas d'importance.
+		addFloat(response, MAX_LINE_LEN, "chrono", chrono, 3);
+		addInt(response, MAX_LINE_LEN, "startStop", startStop);
+	}
+	
+	// Accesseurs en écriture
+	// On traite tous les messages de la forme varName=value
+	// Les fonctions (de BoardViewProto.cpp)  de la forme matchAndAssign*
+	// font cela très bien.
+	 
+	else if(matchAndAssignInt(request, "startStop", &startStop)) strcpy(response, "ok");
+		
+	// Autres commandes
+	
+	else if(matchCmd(request,"clear")) { startStop=0, chrono=0; response="ok"; }
+	
+	// Si la commande n'est pas reconnue, message d'erreur
+	
+	else { ret=1; sprintf(response, "Error : bad request : %s", request); }
+	
+	return ret; 
+}
+```
+
 
 Ajoutons maintenant la vue graphique. Pour cela nous devons configurer un objet de type BoardView, lui associer notre fonction de décodage de protocole et définir l'apparence de la page Web associée aux variables. Ici c'est très basique :
 On veut un champ montrant le chrono, une checkbox pour startStop et un bouton clear.
