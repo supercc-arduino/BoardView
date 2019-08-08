@@ -24,7 +24,20 @@ Pré requis pour faire fonctionner les exemples :
   * Avoir installé la bibliothèque "Web Sockets" de Markus Sattler (version 2.\*) (via le menu "Outils -> Gérer les bibliothèques" par exemple).
   * Avoir téléchargé et installé le ZIP de BoardView (en appliquant la procédure décrite par exemple [ici](https://www.robot-maker.com/ouvrages/tuto-arduino/bibliotheque-arduino/)).
   
+## La vue
 
+La vue de la carte est une page web ou les variables (de la carte) peuvent être consultées et/ou modifier et disposant éventuellement de boutons émettant des commandes. Les widgets disponibles pour l'instant sont minimalistes :
+
+  * Label : pour visualiser uniquement un couple varName=value
+  * Entry : comme Label mais si on clic dessus un popup permet de modifier la valeur.
+  * CheckBox : permet de lancer des commandes si activée/désactivé
+  * Button : permet de lancer des commandes
+  
+ Un aperçu de la vue de l'exemple n°1 :
+ 
+ ![Screenshot](view-chrono.jpg) 
+ 
+ 
 ## Le protocole de communication 
 
 BoardView est conçu pour des échanges à base de commandes. Une commande est de la forme :
