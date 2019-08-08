@@ -12,7 +12,11 @@ Via la connexion TCP il sera (bientôt) possible d'émettre toute commande à de
 
 Pour fonctionner avec BoardView l'application doit intégrer le codage/décodage du protocole. Ce protocole sera décrit plus bas mais est un protocole orienté commandes (un mini shell Unix ;-)) que l'utilisateur (via le navigateur en cliquant sur des boutons) ou les programmes (via la connexion TCP) pourront émettres.
 
-Dans l'image ci-dessous le d1-mini de sert que de pont vers un arduino (nano ici).
+Ce langage de commandes est complètement définissable par l'utilisateur et les exemples fournis plus bas implémentent tous un mini interpréteur de commandes. Ils peuvent vous servir de modèles dans un premier temps.
+
+La ligne directrice de BoardView est d'offrir des fonctions/classes facilement accessibles à tous ce qui veulent faire de la communication réseau avec leurs arduinos sans en maitriser forcément les aspects techniques des protocoles réseaux utilisés (WebSocket, TCP ici).
+
+Dans l'image ci-dessous une capacité intégrée à board view : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquant des arduinos qui ne le sont pas à la base : le d1-mini de sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
 
 ![Screenshot](websock.jpg) 
 
