@@ -1,7 +1,5 @@
 # BoardView
 
-__En cours de construction - pas de code dispo pour l'instant__
-
 L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à tous ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maitriser complètement les aspects techniques des protocoles réseaux utilisés (HTTP, WebSocket, TCP ici). 
 
 Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interractive via l'usage d'une web socket) et/ou (bientot !) via une connexion TCP (pour l'automatisation du pilotage/controle des cartes avec d'autres programmes (scripts, Ruby, ...). 
@@ -160,6 +158,7 @@ Code sur la nano (chrono) :
 
 Code sur le d1-mini (juste en mode "pont" web socket <-> Serial)
 
-
-Quelques remarques :
-  * la liaison série étant monopolisée des 2 cotés 
+Remarques :
+  * la liaison série étant utilisée des 2 cotés vous ne pouvez plus vous en servir pour debugger.
+  * l'alimentation par l'USB du OC reste possible. 
+  
