@@ -35,7 +35,7 @@ La vue de la carte est une page web ou les variables (de la carte) peuvent être
   
  Un aperçu de la vue de l'exemple n°1 :
  
- ![Screenshot](view-chrono.jpg) 
+ ![Screenshot](view-chrono.jpg | width=800) 
  
  
 ## Le protocole de communication 
