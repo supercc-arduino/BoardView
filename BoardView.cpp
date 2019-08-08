@@ -149,7 +149,7 @@ void BoardView::buildConsolePage(String &s) {
 	  <script> \n\
 	  var socket; \n\
 	  function start() { \n\
-		  Socket=new WebSocket('ws://' + window.location.hostname + ':81/'); \n\
+		  Socket=new WebSocket('ws://' + window.location.hostname + ':"+String(webSocketPort)+"/'); \n\
 			  Socket.onmessage=function(evt){ \n\
 					limitTextarea(document.getElementById(\"rxConsole\"),100); \n\
 					var textarea=document.getElementById(\"rxConsole\"); \n\
@@ -186,7 +186,7 @@ void BoardView::buildViewPage(String &s) {
 	  \n\
 	  function start() { \n\
 		intervalID = window.setInterval(periodicDump, "+viewRefreshPeriodMs+"); \n\
-		Socket=new WebSocket('ws://' + window.location.hostname + ':81/'); \n\
+		Socket=new WebSocket('ws://' + window.location.hostname + ':"+String(webSocketPort)+"/'); \n\
 		Socket.onmessage=function(evt){ \n\
 			// show in console \n\
 			textarea=document.getElementById('rxConsole'); \n\n\
@@ -272,7 +272,7 @@ BoardView::BoardView() {
 	boardViewRedirectStream=NULL;
 	httpPort=80;
 	webSocketPort=8081;
-	tcpPort=83;
+	tcpPort=8082;
 	boardViewMaxLineLen=200;
 	maxHistoryLines=200;
 	
