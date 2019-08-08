@@ -20,9 +20,9 @@ Dans l'image ci-dessous le d1-mini de sert que de pont vers un arduino (nano ici
 
 Pré requis pour faire fonctionner les exemples :
 
-  * Avoir installé la chaine de compilation pour votre Esp (voir par exemple [ici](https://github.com/esp8266/Arduino)
+  * Avoir installé la chaine de compilation pour votre Esp (voir par exemple [ici](https://github.com/esp8266/Arduino))
   * Avoir installé la bibliothèque "Web Sockets" de Markus Sattler (version 2.\*) (via le menu "Outils -> Gérer les bibliothèques" par exemple).
-  * Avoir téléchargé et installé le ZIP de BoardView (en appliquant la procédure décrite par exemple [ici](https://www.robot-maker.com/ouvrages/tuto-arduino/bibliotheque-arduino/).
+  * Avoir téléchargé et installé le ZIP de BoardView (en appliquant la procédure décrite par exemple [ici](https://www.robot-maker.com/ouvrages/tuto-arduino/bibliotheque-arduino/)).
   
 
 ## Le protocole de communication 
@@ -67,7 +67,7 @@ Sachant cela on peut définir les commandes du protocole :
   * On veut pouvoir modifier ``startStop`` donc il faudra interpréter les commandes de la forme ``chrono=...`` et  `` startStop=...``
   * on veut une commande ``clear`` arrêtant et réinitialisant le compteur. 
 
-Voila ce que cela donne en  C avec les [fonctions utilitaires]( :
+Voila ce que cela donne en  C avec les [fonctions utilitaires](BoardViewProto.h) :
 
 ```
 // mini interpréteur de commandes simples de la forme :
