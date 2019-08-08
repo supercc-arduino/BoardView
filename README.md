@@ -26,7 +26,7 @@ Pré requis pour faire fonctionner les exemples :
   
 ## La vue
 
-La vue de la carte est une page web ou les variables (de la carte) peuvent être consultées et/ou modifiées et disposant éventuellement de boutons émettant des commandes. Les widgets disponibles pour l'instant sont minimalistes :
+La vue de la carte est une page web ou les variables (de la carte) peuvent être consultées et/ou modifiées et disposant éventuellement de boutons émettant des commandes. 
 
   * Label : pour visualiser uniquement un couple varName=value
   * Entry : comme Label mais si on clic dessus un popup permet de modifier la valeur.
@@ -37,6 +37,14 @@ La vue de la carte est une page web ou les variables (de la carte) peuvent être
  
  <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/view-chrono.jpg" width="320"> 
  
+ Les widgets disponibles sont minimalistes de même que les possibilités de mise en forme de la page html. En échange la composition d'une vue est triviale (au niveau de code à fournir) :
+ 
+```c++
+	boardView.addLabel("chrono");
+	boardView.addCheckBox("startStop", "startStop=0", "startStop=1");
+	boardView.addButton("Clear", "clear");	
+	
+```
  
 ## Le protocole de communication 
 
