@@ -140,14 +140,9 @@ int parseRequest(char *request, char *response, unsigned len) {
 Ajoutons maintenant la vue graphique. Pour cela nous devons configurer un objet de type BoardView, lui associer notre fonction de décodage de protocole et définir l'apparence de la page Web associée aux variables. Ici c'est très basique :
 On veut un champ montrant le chrono, une checkbox pour startStop et un bouton clear.
 
-Le code complet de l'exemple. Adaptez le ssid et le mot de passe.
+Le code [complet de l'exemple](examples/ChronoD1Mini.ino). Adaptez le ssid et le mot de passe !
 
-```
-
-
-```
-
-Une fois le programme téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte : ``Wifi : IP  addr : 192.168.1.X``
+Une fois le programme téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte par le point d'accès (ssid/password) : ``Wifi : IP  addr : 192.168.1.X``
 
 Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez sur la page principale proposant une console (réseau) et la vue définie.
 
