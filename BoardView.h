@@ -7,6 +7,7 @@
 
 #include <BoardViewProto.h>
 
+//#define BOARD_VIEW_DEBUG 
 
 extern WebSocketsServer *boardViewWebSocketServer;
 extern int (*boardViewParseRequest) (char *request, char *response, unsigned len);
