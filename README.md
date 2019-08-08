@@ -69,7 +69,7 @@ Sachant cela on peut définir les commandes du protocole :
 
 Voila ce que cela donne en  C avec les [fonctions utilitaires](BoardViewProto.h) :
 
-```C
+```c++
 // mini interpréteur de commandes simples de la forme :
 // command arg1 arg2 ...
 // variable=valeur
