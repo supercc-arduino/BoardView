@@ -147,6 +147,8 @@ Une fois le programme téléversé, ouvrez la console, passez la vitesse à 1152
 Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez sur la page principale proposant une console (réseau) et la vue définie.
 
 
+<img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/chronos.png" width="320"> 
+
 
 ### Exemple 1.2 : Le chronomètre déporté sur une nano
 
