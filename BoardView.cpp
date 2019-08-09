@@ -1,5 +1,8 @@
 #include <BoardView.h>
 
+// source originelle : 
+// https://www.hackster.io/brzi/nodemcu-websockets-tutorial-3a2013
+
 #if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 
 int (*boardViewParseRequest) (char *request, char *response, unsigned len);
