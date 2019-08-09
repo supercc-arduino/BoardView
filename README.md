@@ -26,7 +26,7 @@ Pré requis pour faire fonctionner les exemples :
   * Avoir installé la bibliothèque "Web Sockets" de Markus Sattler (version 2.\*) (via le menu "Outils -> Gérer les bibliothèques" par exemple pour l'IDE Arduino).
   * Avoir téléchargé et installé le ZIP de BoardView (bouton "Clone or download" en haut de cette page) et ensuite, pour l'IDE Arduino "Croquis -> Inclure une bibliothèque -> -> Ajouter la bibliothèque .ZIP"  (plus de détails [ici](https://www.robot-maker.com/ouvrages/tuto-arduino/bibliotheque-arduino/)).
 
-Aucun matériel nécessaire pour les exemples.
+Aucun matériel nécessaire pour les exemples autre qu'une carte esp8266 (et nano + 4 fils si test du mode "redirect").
 
 ## La vue
 
