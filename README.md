@@ -14,7 +14,7 @@ Pour fonctionner avec BoardView l'application doit intégrer la capacité à tra
 
 Ce langage de commandes est complètement définissable par l'utilisateur et les exemples fournis plus bas implémentent tous un mini interpréteur de commandes. Ils peuvent vous servir de modèles dans un premier temps.
 
-Dans l'image ci-dessous une capacité intégrée à board view : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquant des arduinos qui ne le sont pas à la base : le d1-mini de sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
+Dans l'image ci-dessous une capacité intégrée (mais facultative) à board view : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquant des arduinos qui ne le sont pas à la base : le d1-mini ne sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/websock.png" width="800"> 
