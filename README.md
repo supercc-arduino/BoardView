@@ -16,9 +16,9 @@ Ce langage de commandes est complètement définissable par l'utilisateur et les
 
 Dans l'image ci-dessous une capacité intégrée à board view : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquant des arduinos qui ne le sont pas à la base : le d1-mini de sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
 
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/websock.png" width="800"> 
-</center>
+</p>
 
 
 ## Installation
@@ -42,8 +42,8 @@ La vue de la carte est une page web ou les variables (de la carte) peuvent être
   
 Un aperçu de la vue de l'exemple n°1 :
 
-<center>
-<img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/view-chrono.png" width="160"> 
+<p align="center">
+<img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/view-chrono.png" width="200"> 
 </center>
  
  Les widgets disponibles sont minimalistes de même que les possibilités de mise en forme de la page html. En échange la composition d'une vue est triviale (au niveau de code à fournir) :
@@ -151,9 +151,9 @@ Une fois le programme téléversé, ouvrez la console, passez la vitesse à 1152
 
 Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez sur la page principale proposant une console (réseau) et la vue définie.
 
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/chronos.png" width="640"> 
-</center>
+</p>
 
 ### Exemple 1.2 : Le chronomètre déporté sur une nano
 
