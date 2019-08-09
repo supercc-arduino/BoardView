@@ -276,6 +276,10 @@ La description de la vue est :
 
 ```
 
+<p align="center">
+<img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/bangbang.png" width="200"> 
+</p>
+
 
 Le code [complet de l'exemple](examples/BangBangD1Mini/BangBangD1Mini.ino). Adaptez le ssid et le mot de passe !
 
