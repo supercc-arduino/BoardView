@@ -140,7 +140,7 @@ int parseRequest(char *request, char *response, unsigned len) {
 }
 ```
 
-Le code [complet de l'exemple](examples/ChronoD1Mini.ino). Adaptez le ssid et le mot de passe !
+Le code [complet de l'exemple](examples/ChronoD1Mini/ChronoD1Mini.ino). Adaptez le ssid et le mot de passe !
 
 Une fois le programme téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte par le point d'accès (ssid/password) : ``Wifi : IP  addr : 192.168.1.X``
 
@@ -171,9 +171,22 @@ Une petite mise en situation : supposons que je souhaite réguler le taux d'humi
 Un programme C possible sans considération "réseau" :
 
 ```c
+float hum;               // variable reflétant l'état du capteur d'humidité.
+float threshold=80;      // seuil au dessus duquel l'extraction est souhaité.
+float margin=2;          // marge autour du seul pour éviter les 
+			// oscillations trop rapides
+			
+int relay;               // variable reflétant l'état du relais (extracteur).    
+int onOff;               // variable indiquant si la régulation doit être 
+                         // activée : activée si 1, désactivée si 0.
 
+if(hum < threshold-margin) {
+	if(onOff) relay=0;
+}
+else if(hum > threshold+margin) {
+	if(onOff) relay=1;
+}
 ```  
-
 
 Avec le réseau j'aimerai une vue dans laquelle je peux :
   * voir la valeur de ``hum``
@@ -186,7 +199,7 @@ Avec le réseau j'aimerai une vue dans laquelle je peux :
  
 Comme dans les exemples précédent le langage de commandes découle des opérations à effectuer :
 
-```
+```c
 // mini interpréteur de commandes simples de la forme :
 // command arg1 arg2 ...
 // variable=valeur
@@ -251,8 +264,14 @@ La description de la vue est :
     	boardView.addCheckBox("relay", "relay=0", "relay=1");
 	boardView.addCheckBox("onOff", "onOff=0; relay=0;", "onOff=1");
 
-```c
+```
 
+
+Le code [complet de l'exemple](examples/BangBang/BangBang.ino). Adaptez le ssid et le mot de passe !
+
+Une fois le programme téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte par le point d'accès (ssid/password) : ``Wifi : IP  addr : 192.168.1.X``
+
+Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez sur la page principale proposant une console (réseau) et la vue définie.
 
 Remarques : 
   * les modifications ne survivent pas au reboot de la carte. A vous de voir par exemple à les sauvegarder dans l'EEPROM.
