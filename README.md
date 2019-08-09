@@ -289,4 +289,4 @@ Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez
 
 Remarques : 
   * les modifications ne survivent pas au reboot de la carte. A vous de voir par exemple à les sauvegarder dans l'EEPROM.
-  * Il est possibles de coller une liste de commandes à un bouton ou une checkbox
+  * Il est possible de coller une liste de commandes à un bouton ou une checkbox
