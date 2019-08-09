@@ -16,9 +16,9 @@ Ce langage de commandes est complètement définissable par l'utilisateur et les
 
 Dans l'image ci-dessous une capacité intégrée à board view : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquant des arduinos qui ne le sont pas à la base : le d1-mini de sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
 
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/websock.png" width="800"> 
-</center>
+</p>
 
 
 ## Installation
@@ -42,8 +42,8 @@ La vue de la carte est une page web ou les variables (de la carte) peuvent être
   
 Un aperçu de la vue de l'exemple n°1 :
 
-<center>
-<img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/view-chrono.png" width="320"> 
+<p align="center">
+<img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/view-chrono.png" width="200"> 
 </center>
  
  Les widgets disponibles sont minimalistes de même que les possibilités de mise en forme de la page html. En échange la composition d'une vue est triviale (au niveau de code à fournir) :
@@ -151,9 +151,9 @@ Une fois le programme téléversé, ouvrez la console, passez la vitesse à 1152
 
 Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez sur la page principale proposant une console (réseau) et la vue définie.
 
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/chronos.png" width="640"> 
-</center>
+</p>
 
 ### Exemple 1.2 : Le chronomètre déporté sur une nano
 
@@ -161,11 +161,14 @@ BoardView peut également servir de pont entre un projet arduino sans capacité 
 
 Schéma des branchements, RX arduino vers TX ESP et TX arduino vers RX ESP. Adaptez les niveaux de tension entre les 2 cartes si nécessaire. Plusieurs bloguers (exemple [ici](https://www.ba0sh1.com/blog/2016/08/03/is-esp8266-io-really-5v-tolerant/)), ou vendeurs (exemple [ici](https://protosupplies.com/product/esp8266-d1-mini-v2-esp-12f-wifi-module/)) indiquent que l'esp8266 est assez tolérant au 5V mais a vous de voir...
 
-Code sur la nano (chrono) :
+L'idée est simple : on sépare le code en 2 parties
 
-Code sur le d1-mini (juste en mode "pont" web socket <-> Serial)
+  1. [Code sur la nano](examples/ChronoNano/ChronoNano.ino) : la gestion des capteurs/actionneurs + interprêteur de commandes
+
+  2. Code sur la d1-mini(examples/ChronoD1Mini/ChronoD1Mini.ino) (juste en mode "pont" web socket <-> Serial) : création d'un objet BoardView, définition de la vue démarrage en mode "redirection".
 
 Remarques :
+  * débranchez le lien série unissant les 2 cartes quand vous téléversez sur l'une ou l'autre.
   * la liaison série étant utilisée des 2 cotés vous ne pouvez plus vous en servir pour debugger.
   * l'alimentation par l'USB du PC reste possible. 
   
@@ -274,7 +277,7 @@ La description de la vue est :
 ```
 
 
-Le code [complet de l'exemple](examples/BangBang/BangBang.ino). Adaptez le ssid et le mot de passe !
+Le code [complet de l'exemple](examples/BangBangD1Mini/BangBangD1Mini.ino). Adaptez le ssid et le mot de passe !
 
 Une fois le programme téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte par le point d'accès (ssid/password) : ``Wifi : IP  addr : 192.168.1.X``
 
