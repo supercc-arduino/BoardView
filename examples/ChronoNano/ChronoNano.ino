@@ -1,4 +1,4 @@
-#include <BoardView.h>
+#include <BoardViewProto.h>
 
 #define SERIAL_SPEED 115200
 #define MAX_LINE_LEN 200
@@ -6,8 +6,11 @@
 /*
  * 
  * On souhaite controler depuis son navigateur Internet un chronomètre situé sur 
- * un esp8266. On souhaite disposer d'un bouton Start/Stop et d'un bouton Clear.
+ * une nano. On souhaite disposer d'un bouton Start/Stop et d'un bouton Clear.
  * Le bouton clear, outre le fait de mrettre a 0 le chronomètre l'arrête également.
+ * 
+ * La connexion de la nano au wifi est réalisée par le mode "redirect" d'un boardView 
+ * sur un esp8266..
  * 
  * */
 
@@ -15,14 +18,6 @@
 
 float chrono;            // la valeur du chronomètre.
 int startStop;           // l'état démarré/arrêté (géré par l'utilisateur).
-               
-// Connexion wifi
-          
-const char* ssid = "YOUR_SSID";
-const char* password = "YOUR_PASSWORD";
-
-// Objet boardView, utilisé pour les communications.
-BoardView boardView; 
 
 // Fonction de mise à jour périodique.
 // Mise à jour de la valeur du compteur ici
@@ -37,7 +32,7 @@ void updateTime() {
 	if (currentMillis - previousMillis >= interval) {
 		previousMillis = currentMillis;
 			
-		digitalWrite(LED_BUILTIN, !startStop); // logique negative sur d1-mini.
+		digitalWrite(LED_BUILTIN, startStop);
 		if(startStop==1) chrono+=0.01;
 		
 	}
@@ -47,7 +42,7 @@ void updateTime() {
 // command arg1 arg2 ...
 // variable=valeur
 
-int parseRequest(char *request, char *response, unsigned len) {
+int parseRequest(char *request, char *response, int len) {
 	int ret=0; // code de retour 0 : ok, sinon code d'erreur.
 	
 	response[0]=0; //clear response
@@ -62,11 +57,11 @@ int parseRequest(char *request, char *response, unsigned len) {
 	// couple varName=value que la carte souhaite exposer en lecture seule à 
 	// l'extérieur.
 	
-	if(matchCmd(request,"dump")) {
+	if(matchCmd(request,(char *)"dump")) {
 		// On ajoute toutes les variables que l'on souhaite rendre visibles
 		// L'ordre n'a pas d'importance.
-		addFloat(response, MAX_LINE_LEN, "chrono", chrono, 3);
-		addInt(response, MAX_LINE_LEN, "startStop", startStop);
+		addFloat(response, MAX_LINE_LEN, (char *)"chrono", chrono, 3);
+		addInt(response, MAX_LINE_LEN, (char *)"startStop", startStop);
 	}
 	
 	// Accesseurs en écriture
@@ -74,11 +69,11 @@ int parseRequest(char *request, char *response, unsigned len) {
 	// Les fonctions (de BoardViewProto.cpp)  de la forme matchAndAssign*
 	// font cela très bien.
 	 
-	else if(matchAndAssignInt(request, "startStop", &startStop)) strcpy(response, "ok");
+	else if(matchAndAssignInt(request, (char *)"startStop", &startStop)) strcpy(response,(char *)"ok");
 		
 	// Autres commandes
 	
-	else if(matchCmd(request,"clear")) { startStop=0, chrono=0; response="ok"; }
+	else if(matchCmd(request,(char *)"clear")) { startStop=0, chrono=0; response=(char *)"ok"; }
 	
 	// Si la commande n'est pas reconnue, message d'erreur
 	
@@ -88,40 +83,10 @@ int parseRequest(char *request, char *response, unsigned len) {
 }
 
 void setup() {
-
+	
 	Serial.begin(SERIAL_SPEED);
 	
-	pinMode(LED_BUILTIN, OUTPUT);
-	
-	WiFi.mode(WIFI_STA);
-	WiFi.begin(ssid,password);
-	while (WiFi.status() != WL_CONNECTED) delay(500); 
-	
-	Serial.println("Wifi config :");
-	Serial.println("-----------");
-	Serial.print("Wifi : AP  name : "); Serial.println(ssid);
-	Serial.print("Wifi : IP  addr : "); Serial.println(WiFi.localIP());
-	Serial.print("Wifi : MAC addr : "); Serial.println(WiFi.macAddress());
-	Serial.println("");	
-	
-	
-	// Configuration de boardView
-	
-	
-	// Notre interpréteur de commande
-	boardViewParseRequest=parseRequest;
-	
-	boardView.name="Chrono-1";	
-	boardView.fontSize=2.0;
-	boardView.viewRefreshPeriodMs=100;
-
-	boardView.addLabel("chrono");
-	boardView.addCheckBox("startStop", "startStop=0", "startStop=1");
-	boardView.addButton("Clear", "clear");	
-	
-	// démarrage des services de boardView
-	
-	boardView.begin(); 	
+	pinMode(LED_BUILTIN, OUTPUT);	
 }
 
 void loop() {			
@@ -131,8 +96,8 @@ void loop() {
 	
 	 updateTime();
 	
-	// traitement des messages en attente en provenance de la web socket.
+	// traitement des messages en attente en provenance de la 
+	// liaison série.
 	
-	boardView.loop();
-
+	readAndParseLines(Serial, parseRequest, MAX_LINE_LEN);
 }

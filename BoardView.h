@@ -1,6 +1,8 @@
 #ifndef BOARD_VIEW_H
 #define BOARD_VIEW_H
 
+#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+
 #include <ESP8266WiFi.h>
 #include <WebSocketsServer.h>
 #include <ESP8266WebServer.h>
@@ -133,6 +135,8 @@ class BoardView {
 	void addButton(char *name, char *cmd);
 	void addCheckBox(char *name, char *cmdWhenUnckeck, char *cmdWhenCheck);
 }; 
+
+#endif
 
 #endif
 

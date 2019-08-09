@@ -1,5 +1,7 @@
 #include <BoardView.h>
 
+#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+
 int (*boardViewParseRequest) (char *request, char *response, unsigned len);
 
 WebSocketsServer *boardViewWebSocketServer;
@@ -26,8 +28,11 @@ static void boardViewEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t
 				Serial.println(".");
 			}
 			#endif
-			 		          		          
-			boardViewParseRequest((char *)payload, response, boardViewMaxLineLen-1 );
+			 		
+			// skip leading ' '
+			char *p=(char *)payload;
+			while(*p == ' ' && p<(char *)payload+length) ++p;
+			boardViewParseRequest((char *)p, response, boardViewMaxLineLen-1 );
 			strcat(response,"\n");
 			
 			#ifdef BOARD_VIEW_DEBUG
@@ -109,13 +114,18 @@ void BoardView::buildCommon() {
 	\n \n\
 	function checkPressed(name, cmdWhenUnckeck, cmdWhenCkeck) { \n\
 		  var w=document.getElementById(name); \n\
+		  var cmds;  \n\
 		  if(w) { \n\
+				 \n\
 				if(w.checked) { \n\
-					Socket.send(cmdWhenCkeck); \n\
+					cmds=cmdWhenCkeck \n\
 				} \n\
 				else { \n\
-					Socket.send(cmdWhenUnckeck); \n\
+					cmds=cmdWhenUnckeck; \n\
 				} \n\
+				cmds.split(';').forEach(function(e) {  \n\
+					Socket.send(e);  \n\
+				}); \n\
 		  } \n\
 	  } \n\
 	\n \n\
@@ -234,10 +244,9 @@ void BoardView::buildViewPage(String &s) {
 	  \n\
 	  function buttonPressed(cmd) { \n\
 			cmd.split(';').forEach(function(e) {  \n\
-			e=e.replace(/^ */, ''); \n\
-			Socket.send(e);  \n\
-		}); \n\
-	} \n\
+				Socket.send(e);  \n\
+			}); \n\
+	  } \n\
 	  \n\
 	  function promptForInput(name) { \n\
 			var input=document.getElementById(name); \n\
@@ -350,3 +359,4 @@ void BoardView::addCheckBox(char *name, char *cmdWhenUnckeck, char *cmdWhenCheck
 		widgets[widgetsCpt++]=new CheckBox(this, name, cmdWhenUnckeck, cmdWhenCheck);
 }
 
+#endif
