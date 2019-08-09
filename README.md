@@ -152,7 +152,7 @@ Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez
 
 BoardView peut également servir de pont entre un projet arduino sans capacité wifi mais implémentant le protocole de commandes définit plus haut et le réseau wifi. Le lien physique entre la carte arduino et le module esp8288 disposant de l'objet boardView est la liaison série (Serial) configurée à une vitesse de communication raisonnablement haute (115200 bauds).
 
-Schéma des branchements, RX arduino vers TX ESP et TX arduino vers RX ESP. Adaptez les niveaux de tension entre les 2 cartes si nécessaire. Plusieurs bloguers (exemple [ici]https://www.ba0sh1.com/blog/2016/08/03/is-esp8266-io-really-5v-tolerant/, ou vendeurs [ici](https://protosupplies.com/product/esp8266-d1-mini-v2-esp-12f-wifi-module/) indiquent que l'esp8266 est assez tolérant au 5V mais a vous de voir).
+Schéma des branchements, RX arduino vers TX ESP et TX arduino vers RX ESP. Adaptez les niveaux de tension entre les 2 cartes si nécessaire. Plusieurs bloguers (exemple [ici](https://www.ba0sh1.com/blog/2016/08/03/is-esp8266-io-really-5v-tolerant/)), ou vendeurs (exemple [ici](https://protosupplies.com/product/esp8266-d1-mini-v2-esp-12f-wifi-module/)) indiquent que l'esp8266 est assez tolérant au 5V mais a vous de voir...
 
 Code sur la nano (chrono) :
 
@@ -160,5 +160,5 @@ Code sur le d1-mini (juste en mode "pont" web socket <-> Serial)
 
 Remarques :
   * la liaison série étant utilisée des 2 cotés vous ne pouvez plus vous en servir pour debugger.
-  * l'alimentation par l'USB du OC reste possible. 
+  * l'alimentation par l'USB du PC reste possible. 
   
