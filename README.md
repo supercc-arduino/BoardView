@@ -10,7 +10,7 @@ Via le navigateur web il est possible :
   
 Via la connexion TCP il sera (bientôt) possible d'émettre toute commande à destinaton de tout autre carte/noeud (possédant un objet de type BoardView).
 
-Pour fonctionner avec BoardView l'application doit intégrer le codage/décodage du protocole. Ce protocole sera décrit plus bas mais est un protocole orienté commandes (un mini shell Unix ;-)) que l'utilisateur (via le navigateur en cliquant sur des boutons) ou les programmes (via la connexion TCP) pourront émettres.
+Pour fonctionner avec BoardView l'application doit intégrer la capacité à traiter des commandes simples. Ces commandes seront émises par le navigateur quand l'utilisateur interagira avec les widgets ou émises par d'autres programmes. 
 
 Ce langage de commandes est complètement définissable par l'utilisateur et les exemples fournis plus bas implémentent tous un mini interpréteur de commandes. Ils peuvent vous servir de modèles dans un premier temps.
 
@@ -50,7 +50,7 @@ Un aperçu de la vue de l'exemple n°1 :
 	
 ```
  
-## Le protocole de communication 
+## Le langage de commandes
 
 BoardView est conçu pour des échanges à base de commandes. Une commande est de la forme :
 
@@ -63,8 +63,6 @@ Une forme particulière de commande est la commande de modification de variable 
 Ou (à cause du signe = difficilement accessible à partir d'un clavier virtuel de smartphone)
 
 ``varname value``
-
-Une autre particularité liée aux claviers virtuels qui ont tendance à mettre en majuscule la première lettre de la commande, est qu'une commande verra automatiquement sa première lettre passée en minuscule (un effet de bord est qu'il ne sera pas possible d'affecter la valeur aux variables dont le nom commence par une majuscule, mais qui met une majuscule à ses noms de variables ?, qui ?).
 
 Le noeud destinataire d'une commande construira la réponse, également sous la forme d'une unique ligne, qu'il retournera à l'émetteur de la commande. Cela peut être un résultat, ou juste l'information que la commande s'est correctement déroulée ("ok") ou pas ("erreur : code ou message...")
 
@@ -80,9 +78,11 @@ Si le noeud veut rendre possible la modification de certaines de ses variables a
 
 C'est tout pour la théorie, place à la pratique ;-)
 
-## Premier exemple
+## Exemples d'interactions via le navigateur
 
-Pour ce premier exemple nous utiliserons une petite application de type chronomètre destinée à tester l'interactivité offerte par la web socket (esp8266).
+### Exemple 1.1 : Un chronomètre.
+
+Pour ce premier exemple nous utiliserons une petite application de type chronomètre destinée à tester l'interactivité ( web socket esp8266).
 
 On souhaie plus précisément voir la valeur du chronomètre (chrono de type float), pouvoir démarrer/arrêter le chronomètre (variable startStop) et enfin disposer d'un bouton clear.  
 
@@ -148,7 +148,7 @@ Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez
 
 
 
-## Second exemple
+### Exemple 1.2 : Le chronomètre déporté sur une nano
 
 BoardView peut également servir de pont entre un projet arduino sans capacité wifi mais implémentant le protocole de commandes définit plus haut et le réseau wifi. Le lien physique entre la carte arduino et le module esp8288 disposant de l'objet boardView est la liaison série (Serial) configurée à une vitesse de communication raisonnablement haute (115200 bauds).
 
@@ -162,3 +162,98 @@ Remarques :
   * la liaison série étant utilisée des 2 cotés vous ne pouvez plus vous en servir pour debugger.
   * l'alimentation par l'USB du PC reste possible. 
   
+### Exemple 1.3 : Un asservissement tout ou rien
+
+L'asservissement [tout ou rien](https://fr.wikipedia.org/wiki/Tout_ou_rien) ([bang-bang](https://en.wikipedia.org/wiki/Bang%E2%80%93bang_control) en anglais) à le mérite de la simplicité.
+
+Une petite mise en situation : supposons que je souhaite réguler le taux d'humidité de ma buanderie qui à la facheuse tendance à grimper lorque j'y mets mon linge à sécher en hiver. Du coup mes cartons se ramollissent.... . Pour l'éviter je souhaite piloter, via un relai, un extracteur qui doit se déclencher dès que l'humidité atteint un certain seuil. Dans ce genre d'asservissement, pour éviter que les oscillations du capteur autour du seuil ne provoquent de nombreuses activations/désactivation du relais il est courant de définir une "marge" faisant que l'état du relais n'est pas changé par le système de régulaton si la valeur est dans l'intervalle [seuil-marge, seuil+marge]. J'anticipe la suite en imposant que la régulation soit également conditionnée par l'état d'une variable onOff (int).
+
+Un programme C possible sans considération "réseau" :
+
+```c
+
+```  
+
+
+Avec le réseau j'aimerai une vue dans laquelle je peux :
+  * voir la valeur de ``hum``
+  * voir et éventuellement modifier les variables ``threshold`` et ``margin``
+  * voir et éventuellement modifier ``onOff`` et ``relay`` mais avec des checkboxs
+  
+ Du coup 
+   * avec onOff je choisi le mode manuel ou le mode régulé
+   * en mode manuel je pilote le relais avec la checkbox
+ 
+Comme dans les exemples précédent le langage de commandes découle des opérations à effectuer :
+
+```
+// mini interpréteur de commandes simples de la forme :
+// command arg1 arg2 ...
+// variable=valeur
+
+int parseRequest(char *request, char *response, unsigned len) {
+	int ret=0; // code de retour 0 : ok, sinon code d'erreur.
+	
+	response[0]=0; //clear response
+	
+	// lowercase first letter (for smartphone keyboard)
+	if(request[0]>='A' && request[0]<='Z') request[0]=request[0]+'a'-'A';
+
+	// On utilise les fonctions utilitaires de codage/décodage d'une commande
+	
+	// commande dump
+	// La commande dump doit retourner dans la variable response la liste des
+	// couple varName=value que la carte souhaite exposer en lecture seule à 
+	// l'extérieur.
+		
+	if(matchCmd(request,"dump")) {
+		// On ajoute toutes les variables que l'on souhaite rendre visibles
+		// L'ordre n'a pas d'importance.
+		addFloat(response, MAX_LINE_LEN, "hum", hum, 1);
+		addFloat(response, MAX_LINE_LEN, "threshold", threshold, 1);
+		addFloat(response, MAX_LINE_LEN, "margin", margin, 1);
+		addInt  (response, MAX_LINE_LEN, "relay", relay);
+		addInt  (response, MAX_LINE_LEN, "onOff", onOff);
+		
+	}
+	
+	// Accesseurs en écriture
+	// On traite tous les messages de la forme varName=value
+	// Les fonctions (de BoardViewProto.cpp)  de la forme matchAndAssign*
+	// font cela très bien.
+	
+	else if(matchAndAssignFloat(request, "hum", &hum)) strcpy(response, "ok"); 
+	else if(matchAndAssignFloat(request, "threshold", &threshold)) strcpy(response, "ok"); 
+	else if(matchAndAssignFloat(request, "margin", &margin)) strcpy(response, "ok"); 
+	else if(matchAndAssignInt  (request, "relay", &relay)) strcpy(response, "ok");
+	else if(matchAndAssignInt  (request, "onOff", &onOff)) strcpy(response, "ok");
+		
+	// Autres commandes
+	
+	// ...
+	
+	// Si la commande n'est pas reconnue, message d'erreur
+	
+	else { ret=1; sprintf(response, "Error : bad request : %s", request); }
+	
+	return ret; 
+}
+
+```
+
+La description de la vue est :
+
+```C
+	boardView.addLabel("hum");
+	boardView.addEntry("threshold");
+	boardView.addEntry("margin");
+	
+    	boardView.addCheckBox("relay", "relay=0", "relay=1");
+	boardView.addCheckBox("onOff", "onOff=0; relay=0;", "onOff=1");
+
+```c
+
+
+Remarques : 
+  * les modifications ne survivent pas au reboot de la carte. A vous de voir par exemple à les sauvegarder dans l'EEPROM.
+  * Il est possibles de coller une liste de commandes à un bouton ou une checkbox
