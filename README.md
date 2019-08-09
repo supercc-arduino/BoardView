@@ -43,7 +43,7 @@ La vue de la carte est une page web ou les variables (de la carte) peuvent être
 Un aperçu de la vue de l'exemple n°1 :
 
 <center>
-<img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/view-chrono.png" width="320"> 
+<img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/view-chrono.png" width="160"> 
 </center>
  
  Les widgets disponibles sont minimalistes de même que les possibilités de mise en forme de la page html. En échange la composition d'une vue est triviale (au niveau de code à fournir) :
