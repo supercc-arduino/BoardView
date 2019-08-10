@@ -15,7 +15,7 @@ float s2f(char *s) {
 }
 
 
-char *addInt(char *dst, int len, char *name, int value) {
+char *addInt(char *dst, unsigned len, char *name, int value) {
 	char tmp[20];
 	
 	if(dst[0]!= 0)
@@ -29,7 +29,7 @@ char *addInt(char *dst, int len, char *name, int value) {
 }
 
 
-char *addFloat(char *dst, int len, char *name, float value, int prec) {		
+char *addFloat(char *dst, unsigned len, char *name, float value, int prec) {		
 	char tmp[20];
 	
 	if(dst[0] != 0)
@@ -48,7 +48,7 @@ char *addFloat(char *dst, int len, char *name, float value, int prec) {
 }
 
 
-char *addStr(char *dst, int len, char *name, char *s) {
+char *addStr(char *dst, unsigned len, char *name, char *s) {
 	char tmp[len];
 	
 	if(dst[0] != 0)
@@ -57,6 +57,8 @@ char *addStr(char *dst, int len, char *name, char *s) {
 		sprintf(tmp, "%s=\"%s\"", name, s);
 		
 	if(strlen(dst)+strlen(tmp)<len-1) strcat(dst, tmp);	
+	
+	return dst;
 }
 
 

@@ -42,7 +42,7 @@ float s2f(char *s) ;
  * 
  * */
  
-char *addInt(char *dst, int len, char *name, int value); 
+char *addInt(char *dst, unsigned len, char *name, int value); 
 
 
 /*
@@ -56,7 +56,7 @@ char *addInt(char *dst, int len, char *name, int value);
  * 
  * */
  
-char *addFloat(char *dst, int len, char *name, float value, int prec);
+char *addFloat(char *dst, unsigned len, char *name, float value, int prec);
 
 /*
  * Ajoute un chaîne de caractères.
@@ -70,7 +70,7 @@ char *addFloat(char *dst, int len, char *name, float value, int prec);
  * */
  
  
-char *addStr(char *dst, int len, char *name, char *s);
+char *addStr(char *dst, unsigned len, char *name, char *s);
 
 /*
  *  Fonctions d'aide au décodage des messages reçus
