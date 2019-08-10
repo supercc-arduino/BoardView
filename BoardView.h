@@ -1,6 +1,8 @@
 #ifndef BOARD_VIEW_H
 #define BOARD_VIEW_H
 
+#define BOARD_VIEW_VERSION "0.1"
+
 #if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 
 #include <ESP8266WiFi.h>
