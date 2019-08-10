@@ -165,7 +165,7 @@ L'idée est simple : on sépare le code en 2 parties
 
   1. [Code sur la nano](examples/ChronoNano/ChronoNano.ino) : la gestion des capteurs/actionneurs + interprêteur de commandes
 
-  2. Code sur la d1-mini(examples/ChronoD1Mini/ChronoD1Mini.ino) (juste en mode "pont" web socket <-> Serial) : création d'un objet BoardView, définition de la vue démarrage en mode "redirection".
+  2. [Code sur la d1-mini](examples/ChronoD1Mini/ChronoD1Mini.ino) (juste en mode "pont" web socket <-> Serial) : création d'un objet BoardView, définition de la vue démarrage en mode "redirection".
 
 Remarques :
   * débranchez le lien série unissant les 2 cartes quand vous téléversez sur l'une ou l'autre.
@@ -289,4 +289,4 @@ Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez
 
 Remarques : 
   * les modifications ne survivent pas au reboot de la carte. A vous de voir par exemple à les sauvegarder dans l'EEPROM.
-  * Il est possibles de coller une liste de commandes à un bouton ou une checkbox
+  * Il est possible de coller une liste de commandes à un bouton ou une checkbox
