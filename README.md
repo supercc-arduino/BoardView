@@ -1,20 +1,20 @@
 # BoardView
 
-L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à tous ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maitriser complètement les aspects techniques des protocoles réseaux utilisés (HTTP, WebSocket, TCP ici). 
+L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à tous ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maîtriser complètement les aspects techniques des protocoles réseaux utilisés (HTTP, WebSocket, TCP ici). 
 
-Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interractive via l'usage d'une web socket) et/ou (bientot !) via une connexion TCP (pour l'automatisation du pilotage/controle des cartes avec d'autres programmes (scripts, Ruby, ...). 
+Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interactive via l'usage d'une web socket) et/ou (bientôt !) via une connexion TCP (pour l'automatisation du pilotage/contrôle des cartes avec d'autres programmes (scripts, Ruby, ...). 
 
 Via le navigateur web il est possible :
   * d'obtenir une console réseau (similaire à la console de l'IDE arduino)
-  * d'obtenir une vue des variables (int/float) de la carte avec possibiliter de les modifier, via une saisie avec clavier ou une checkbox. A cette vue peuvent être ajoutés des boutons qui, s'ils sont cliqués, émettent une (ou plusieurs) commandes à destination de la carte.
+  * d'obtenir une vue des variables (int/float) de la carte avec possibilité de les modifier, via une saisie avec clavier ou une checkbox. A cette vue peuvent être ajoutés des boutons qui, s'ils sont cliqués, émettent une (ou plusieurs) commandes à destination de la carte.
   
-Via la connexion TCP il sera (bientôt) possible d'émettre toute commande à destinaton de tout autre carte/noeud (possédant un objet de type BoardView).
+Via la connexion TCP il sera (bientôt) possible d'émettre toute commande à destination de tout autre carte/nœud (possédant un objet de type BoardView).
 
 Pour fonctionner avec BoardView l'application doit intégrer la capacité à traiter des commandes simples. Ces commandes seront émises par le navigateur quand l'utilisateur interagira avec les widgets ou émises par d'autres programmes. 
 
 Ce langage de commandes est complètement définissable par l'utilisateur et les exemples fournis plus bas implémentent tous un mini interpréteur de commandes. Ils peuvent vous servir de modèles dans un premier temps.
 
-Dans l'image ci-dessous une capacité intégrée (mais facultative) à board view : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquant des arduinos qui ne le sont pas à la base : le d1-mini ne sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
+Dans l'image ci-dessous une capacité intégrée (mais facultative) à BoardView : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquant des arduinos qui ne le sont pas à la base : le d1-mini ne sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/websock.png" width="800"> 
@@ -25,7 +25,7 @@ Dans l'image ci-dessous une capacité intégrée (mais facultative) à board vie
 
 Pré requis pour faire fonctionner les exemples :
 
-  * Avoir installé la chaine de compilation pour votre Esp (voir par exemple [ici](https://github.com/esp8266/Arduino))
+  * Avoir installé la chaîne de compilation pour votre Esp (voir par exemple [ici](https://github.com/esp8266/Arduino))
   * Avoir installé la bibliothèque "Web Sockets" de Markus Sattler (version 2.\*) (via le menu "Outils -> Gérer les bibliothèques" par exemple pour l'IDE Arduino).
   * Avoir téléchargé et installé le ZIP de BoardView (bouton "Clone or download" en haut de cette page) et ensuite, pour l'IDE Arduino "Croquis -> Inclure une bibliothèque -> -> Ajouter la bibliothèque .ZIP"  (plus de détails [ici](https://www.robot-maker.com/ouvrages/tuto-arduino/bibliotheque-arduino/)).
 
@@ -69,15 +69,15 @@ Ou (à cause du signe = difficilement accessible à partir d'un clavier virtuel 
 
 ``varname value``
 
-Le noeud destinataire d'une commande construira la réponse, également sous la forme d'une unique ligne, qu'il retournera à l'émetteur de la commande. Cela peut être un résultat, ou juste l'information que la commande s'est correctement déroulée ("ok") ou pas ("erreur : code ou message...")
+Le nœud destinataire d'une commande construira la réponse, également sous la forme d'une unique ligne, qu'il retournera à l'émetteur de la commande. Cela peut être un résultat, ou juste l'information que la commande s'est correctement déroulée ("ok") ou pas ("erreur : code ou message...")
 
-La première (et éventuellement la seule) commande que doit être capable d'interpréter un noeud est la commande :
+La première (et éventuellement la seule) commande que doit être capable d'interpréter un nœud est la commande :
 
 ``dump``
 
 Très simple (pas d'argument) mais indispensable car en réponse le noeud communique tous les couples ``varName=value`` des variables qu'il souhaite rendre visibles (exemple de réponse : "var1=23.2; otherVar=8; again=1").
 
-Si le noeud veut rendre possible la modification de certaines de ses variables alors il doit interpréter les messages de la forme :
+Si le nœud veut rendre possible la modification de certaines de ses variables alors il doit interpréter les messages de la forme :
 
 ``varname=value # (on rappelle que l'espace peut remplacer '=')``
 
@@ -89,7 +89,7 @@ C'est tout pour la théorie, place à la pratique ;-)
 
 Pour ce premier exemple nous utiliserons une petite application de type chronomètre destinée à tester l'interactivité ( web socket esp8266).
 
-On souhaie plus précisément voir la valeur du chronomètre (chrono de type float), pouvoir démarrer/arrêter le chronomètre (variable startStop) et enfin disposer d'un bouton clear.  
+On souhaite plus précisément voir la valeur du chronomètre (chrono de type float), pouvoir démarrer/arrêter le chronomètre (variable startStop) et enfin disposer d'un bouton clear.  
 
 Sachant cela on peut définir les commandes du protocole :
 
@@ -159,24 +159,24 @@ Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez
 
 BoardView peut également servir de pont entre un projet arduino sans capacité wifi mais implémentant le protocole de commandes définit plus haut et le réseau wifi. Le lien physique entre la carte arduino et le module esp8288 disposant de l'objet boardView est la liaison série (Serial) configurée à une vitesse de communication raisonnablement haute (115200 bauds).
 
-Schéma des branchements, RX arduino vers TX ESP et TX arduino vers RX ESP. Adaptez les niveaux de tension entre les 2 cartes si nécessaire. Plusieurs bloguers (exemple [ici](https://www.ba0sh1.com/blog/2016/08/03/is-esp8266-io-really-5v-tolerant/)), ou vendeurs (exemple [ici](https://protosupplies.com/product/esp8266-d1-mini-v2-esp-12f-wifi-module/)) indiquent que l'esp8266 est assez tolérant au 5V mais a vous de voir...
+Schéma des branchements, RX arduino vers TX ESP et TX arduino vers RX ESP. Adaptez les niveaux de tension entre les 2 cartes si nécessaire. Plusieurs blogueurs (exemple [ici](https://www.ba0sh1.com/blog/2016/08/03/is-esp8266-io-really-5v-tolerant/)), ou vendeurs (exemple [ici](https://protosupplies.com/product/esp8266-d1-mini-v2-esp-12f-wifi-module/)) indiquent que l'esp8266 est assez tolérant au 5V mais a vous de voir...
 
 L'idée est simple : on sépare le code en 2 parties
 
-  1. [Code sur la nano](examples/ChronoNano/ChronoNano.ino) : la gestion des capteurs/actionneurs + interprêteur de commandes
+  1. [Code sur la nano](examples/ChronoNano/ChronoNano.ino) : la gestion des capteurs/actionneurs + interpréteur de commandes
 
   2. [Code sur la d1-mini](examples/ChronoD1Mini/ChronoD1Mini.ino) (juste en mode "pont" web socket <-> Serial) : création d'un objet BoardView, définition de la vue démarrage en mode "redirection".
 
 Remarques :
   * débranchez le lien série unissant les 2 cartes quand vous téléversez sur l'une ou l'autre.
-  * la liaison série étant utilisée des 2 cotés vous ne pouvez plus vous en servir pour debugger.
+  * la liaison série étant utilisée des 2 cotés vous ne pouvez plus vous en servir pour déboguer.
   * l'alimentation par l'USB du PC reste possible. 
   
 ### Exemple 1.3 : Un asservissement tout ou rien
 
 L'asservissement [tout ou rien](https://fr.wikipedia.org/wiki/Tout_ou_rien) ([bang-bang](https://en.wikipedia.org/wiki/Bang%E2%80%93bang_control) en anglais) à le mérite de la simplicité.
 
-Une petite mise en situation : supposons que je souhaite réguler le taux d'humidité de ma buanderie qui à la facheuse tendance à grimper lorque j'y mets mon linge à sécher en hiver. Du coup mes cartons se ramollissent.... . Pour l'éviter je souhaite piloter, via un relai, un extracteur qui doit se déclencher dès que l'humidité atteint un certain seuil. Dans ce genre d'asservissement, pour éviter que les oscillations du capteur autour du seuil ne provoquent de nombreuses activations/désactivation du relais il est courant de définir une "marge" faisant que l'état du relais n'est pas changé par le système de régulaton si la valeur est dans l'intervalle [seuil-marge, seuil+marge]. J'anticipe la suite en imposant que la régulation soit également conditionnée par l'état d'une variable onOff (int).
+Une petite mise en situation : supposons que je souhaite réguler le taux d'humidité de ma buanderie qui à la fâcheuse tendance à grimper lorsque j'y mets mon linge à sécher en hiver. Du coup mes cartons se ramollissent.... . Pour l'éviter je souhaite piloter, via un relai, un extracteur qui doit se déclencher dès que l'humidité atteint un certain seuil. Dans ce genre d'asservissement, pour éviter que les oscillations du capteur autour du seuil ne provoquent de nombreuses activations/désactivation du relais il est courant de définir une "marge" faisant que l'état du relais n'est pas changé par le système de régulation si la valeur est dans l'intervalle [seuil-marge, seuil+marge]. J'anticipe la suite en imposant que la régulation soit également conditionnée par l'état d'une variable onOff (int).
 
 Un programme C possible sans considération "réseau" :
 
