@@ -11,14 +11,15 @@ WARNING, la doc est en avance par rapport au code. Le code de TCP n'est pas enco
     - [Exemple 1.1 : Un chronomètre.](#exemple-11--un-chronomètre)
     - [Exemple 1.2 : Le chronomètre déporté sur une nano](#exemple-12--le-chronomètre-déporté-sur-une-nano)
     - [Exemple 1.3 : Un asservissement tout ou rien](#exemple-13--un-asservissement-tout-ou-rien)
-    
+  - [FAQ](#FAQ)
+
 ## Introduction
 
-L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à tous ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maîtriser complètement les aspects techniques des protocoles réseaux de la famille TCP/IP utilisés (HTTP, WebSocket, TCP). 
+L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maîtriser complètement les aspects techniques des protocoles réseaux de la famille TCP/IP utilisés (HTTP, WebSocket, TCP). 
 
 Exemple d'applications :
   * Un contrôle interactif de ses cartes avec son smartphone (connecté au point d'accès partagé par les noeuds).
-  * Une mini solution domotique sans autre serveur.
+  * Une solution domotique avec ses propre serveurs.
   * De la robotique (commande du robot via son PC, une Raspberry, ...)
   * Des automates "dispersés" (des capteurs sont sur des cartes et des actionneurs sur d'autres par exemple).
   
@@ -42,9 +43,9 @@ Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de commu
 
 Via le navigateur web il est possible :
   * d'obtenir une console réseau (similaire à la console de l'IDE arduino)
-  * d'obtenir une vue des variables (int/float/char `` * ``) de la carte avec possibilité de les modifier, via une saisie avec clavier ou une checkbox. A cette vue peuvent être ajoutés des boutons qui, s'ils sont cliqués, émettent une (ou plusieurs) commandes à destination de la carte.
+  * d'obtenir une vue des variables (int/float/char ``*``) de la carte avec possibilité de les modifier, via une saisie avec clavier ou une checkbox. A cette vue peuvent être ajoutés des boutons qui, s'ils sont cliqués, émettent une (ou plusieurs) commandes à destination de la carte.
   
-Via la connexion TCP il possible possible :
+Via la connexion TCP il possible :
   * d'émettre toute commande à destination de tout autre carte/noeud (possédant un objet de type BoardView)
     * à partir d'une carte via la fonction tcpRequest fournie.
     * à partir d'un système POSIX, via la commande tcpRequest fournie
@@ -64,6 +65,16 @@ Dans l'image ci-dessous une capacité intégrée (mais facultative) à BoardView
 <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/websock.png" width="800"> 
 </p>
 
+## Note importante sur les exemples
+
+> ⚠️ **Warning**: Les #define suivants sont supposés être dans le fichier ``boardViewPrefs.h`` :
+
+``` c
+#define SSID "wifi-ssid"
+#define PASSWORD "wifi-password"
+```
+
+Il vous faudra soit les définir dans le fichier soit les définir directement dans votre programme.
 
 ## Installation
 
