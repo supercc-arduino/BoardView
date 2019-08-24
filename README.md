@@ -1,20 +1,64 @@
 # BoardView
 
-L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à tous ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maîtriser complètement les aspects techniques des protocoles réseaux utilisés (HTTP, WebSocket, TCP ici). 
+WARNING, la doc est en avance par rapport au code. Le code de TCP n'est pas encore posté donc les explications sur TCP ne s'appliquent pas encore. Je fais la doc d'abord...
 
-Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interactive via l'usage d'une web socket) et/ou (bientôt !) via une connexion TCP (pour l'automatisation du pilotage/contrôle des cartes avec d'autres programmes (scripts, Ruby, ...). 
+- [BoardView](#boardview)
+  - [Introduction](#introduction)
+  - [Installation](#installation)
+  - [La vue](#la-vue)
+  - [Le langage de commandes](#le-langage-de-commandes)
+  - [Exemples d'interactions via le navigateur](#exemples-d&apos;interactions-via-le-navigateur)
+    - [Exemple 1.1 : Un chronomètre.](#exemple-11--un-chronomètre)
+    - [Exemple 1.2 : Le chronomètre déporté sur une nano](#exemple-12--le-chronomètre-déporté-sur-une-nano)
+    - [Exemple 1.3 : Un asservissement tout ou rien](#exemple-13--un-asservissement-tout-ou-rien)
+    
+## Introduction
+
+L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à tous ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maîtriser complètement les aspects techniques des protocoles réseaux de la famille TCP/IP utilisés (HTTP, WebSocket, TCP). 
+
+Exemple d'applications :
+  * Un contrôle interactif de ses cartes avec son smartphone (connecté au point d'accès partagé par les noeuds).
+  * Une mini solution domotique sans autre serveur.
+  * De la robotique (commande du robot via son PC, une Raspberry, ...)
+  * Des automates "dispersés" (des capteurs sont sur des cartes et des actionneurs sur d'autres par exemple).
+  
+Quelques caractéristiques :
+
+  * n'a été testé que sur ESP8266. Projet très jeune, mais les exemples fonctionnent.
+  
+  * utilise un réseau wifi entre les participants supposé existant et acceptant l'intégration des noeuds (cartes). Une box domestique fait l'affaire. 
+  
+  * dispose d'un logiciel pont, permettant à n'importe qu'elle carte arduino connecté simplement via un port série (UART) à l'ESP8266 de réaliser toutes les opérations.
+
+  * ne bride en rien les capacité du réseau existant (vos cartes pourront toujours avoir accès à Internet ou à tout autre service si c'était le cas avant).
+  
+  * Utilise un mini interpréteur de commandes facilement personnalisable.
+  
+  * les cartes peuvent être commandées simulanément via les différents protocoles supportés. Cependant les différentes requêtes arrivant simultanément sur un même noeud seront éxécutées séquentiellement (dans un ordre indéterminé) afin d'assurer leur atomicité.
+  
+Voir aussi les [##FAQ]
+
+Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interactive via l'usage d'une web socket) et/ou  via une connexion TCP (pour l'automatisation du pilotage/contrôle des cartes par d'autre cartes et/ou avec d'autres programmes (scripts, Ruby, ...) sur PC ou Raspberry PI (et de façon générale sous systèmes POSIX).
 
 Via le navigateur web il est possible :
   * d'obtenir une console réseau (similaire à la console de l'IDE arduino)
-  * d'obtenir une vue des variables (int/float) de la carte avec possibilité de les modifier, via une saisie avec clavier ou une checkbox. A cette vue peuvent être ajoutés des boutons qui, s'ils sont cliqués, émettent une (ou plusieurs) commandes à destination de la carte.
+  * d'obtenir une vue des variables (int/float/char `` * ``) de la carte avec possibilité de les modifier, via une saisie avec clavier ou une checkbox. A cette vue peuvent être ajoutés des boutons qui, s'ils sont cliqués, émettent une (ou plusieurs) commandes à destination de la carte.
   
-Via la connexion TCP il sera (bientôt) possible d'émettre toute commande à destination de tout autre carte/nœud (possédant un objet de type BoardView).
+Via la connexion TCP il possible possible :
+  * d'émettre toute commande à destination de tout autre carte/noeud (possédant un objet de type BoardView)
+    * à partir d'une carte via la fonction tcpRequest fournie.
+    * à partir d'un système POSIX, via la commande tcpRequest fournie
 
-Pour fonctionner avec BoardView l'application doit intégrer la capacité à traiter des commandes simples. Ces commandes seront émises par le navigateur quand l'utilisateur interagira avec les widgets ou émises par d'autres programmes. 
+Pour fonctionner avec BoardView l'application doit intégrer la capacité à traiter des commandes simples. Ces commandes seront émises par d'autres programmes ou par le navigateur quand l'utilisateur interagira avec les widgets. 
 
 Ce langage de commandes est complètement définissable par l'utilisateur et les exemples fournis plus bas implémentent tous un mini interpréteur de commandes. Ils peuvent vous servir de modèles dans un premier temps.
 
-Dans l'image ci-dessous une capacité intégrée (mais facultative) à BoardView : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquant des arduinos qui ne le sont pas à la base : le d1-mini ne sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
+Cependant des constantes reviennent dans le langage de commandes :
+  * donner accès en lecture à une de ses variables
+  * idem mais en lecture/écriture
+  * donner accès à une fonction (la capacité de déclencher la fonction).
+
+Dans l'image ci-dessous une capacité intégrée (mais facultative) à BoardView : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquants des arduinos qui ne le sont pas à la base : le d1-mini ne sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/supercc-arduino/BoardView/master/websock.png" width="800"> 
@@ -38,7 +82,7 @@ La vue de la carte est une page web ou les variables (de la carte) peuvent être
   * Label : pour visualiser uniquement un couple varName=value
   * Entry : comme Label mais si on clic dessus un popup permet de modifier la valeur.
   * CheckBox : permet de lancer des commandes si activée/désactivé
-  * Button : permet de lancer des commandes
+  * Button : permet de démarrer l'exécution de fonctions.
   
 Un aperçu de la vue de l'exemple n°1 :
 
@@ -71,11 +115,11 @@ Ou (à cause du signe = difficilement accessible à partir d'un clavier virtuel 
 
 Le nœud destinataire d'une commande construira la réponse, également sous la forme d'une unique ligne, qu'il retournera à l'émetteur de la commande. Cela peut être un résultat, ou juste l'information que la commande s'est correctement déroulée ("ok") ou pas ("erreur : code ou message...")
 
-La première (et éventuellement la seule) commande que doit être capable d'interpréter un nœud est la commande :
+La première (et éventuellement la seule) commande que doit être capable d'interpréter un noeud est la commande :
 
 ``dump``
 
-Très simple (pas d'argument) mais indispensable car en réponse le noeud communique tous les couples ``varName=value`` des variables qu'il souhaite rendre visibles (exemple de réponse : "var1=23.2; otherVar=8; again=1").
+Très simple (pas d'argument) mais indispensable car en réponse le noeud communique tous les couples ``varName=value`` des variables qu'il souhaite rendre visibles en lecture seule (exemple de réponse : "var1=23.2; otherVar=8; again=1").
 
 Si le nœud veut rendre possible la modification de certaines de ses variables alors il doit interpréter les messages de la forme :
 
@@ -83,7 +127,7 @@ Si le nœud veut rendre possible la modification de certaines de ses variables a
 
 C'est tout pour la théorie, place à la pratique ;-)
 
-## Exemples d'interactions via le navigateur
+## Exemples d&apos;interactions via le navigateur
 
 ### Exemple 1.1 : Un chronomètre.
 
@@ -290,3 +334,11 @@ Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez
 Remarques : 
   * les modifications ne survivent pas au reboot de la carte. A vous de voir par exemple à les sauvegarder dans l'EEPROM.
   * Il est possible de coller une liste de commandes à un bouton ou une checkbox
+  
+## FAQ
+
+  * Peut-on contrôler ses cartes par d'Internet ?
+  
+  Rien ne l'empêche, mais c'est un problème de routage, à vous de configurer le nécessaire sur votre routeur/box.
+  
+  
