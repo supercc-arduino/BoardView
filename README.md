@@ -11,6 +11,7 @@ WARNING, la doc est en avance par rapport au code. Le code de TCP n'est pas enco
     - [Exemple 1.1 : Un chronomètre.](#exemple-11--un-chronomètre)
     - [Exemple 1.2 : Le chronomètre déporté sur une nano](#exemple-12--le-chronomètre-déporté-sur-une-nano)
     - [Exemple 1.3 : Un asservissement tout ou rien](#exemple-13--un-asservissement-tout-ou-rien)
+  - [Configuration d'un objet boardView](#configuration-d&apos;un-objet-boardView)
   - [FAQ](#FAQ)
 
 ## Introduction
@@ -345,10 +346,44 @@ Dans la barre de saisie de votre navigateur copiez/collez l'IP. Vous atterrissez
 Remarques : 
   * les modifications ne survivent pas au reboot de la carte. A vous de voir par exemple à les sauvegarder dans l'EEPROM.
   * Il est possible de coller une liste de commandes à un bouton ou une checkbox
-  
+
+
+
+## Configuration d'un objet boardView
+
+Après avoir créer un objet boardView (`Boardview boardview;`, et **avant** de démarrer les services (`boardView.begin();`) il est nécessaire de le configurer. La configuration dépends des services activés.
+
+### Congiguation minimale
+|Membres publics| Type | Valeur par défaut | Description |
+|---|---|---|---|
+|maxNameLen|`unsigned`|16|Longueur maximum d'un nom.|
+|name|`char *`|"noname"|Nom de l'objet boardView (réservé pour usage ultérieur).|
+
+### En mode "redirect"
+
+| redirect | `Stream` | `NULL` | Flux où doivent être redirigées les raquête qui arrivent.|
+
+En mode "redirect" la fonction parseRequest n'a pas à être renseignée puisque les requête sont redirigées.
+
+### En mode normal
+
+|parseRequest|`handler`|Fonction d'analyse d'une requête (commande).|
+
+### La vue sur le navigateur
+
+boardView.fontSize | ` float` | 1.0 | font-size HTML attribut. |
+viewRefreshPeriodMs | `int` | 100 | Délais entre 2 rafraichissement de la vue |
+
+## Constantes
+
+En début du fichier BoardView.h sont définies les constantes suivantes (à adapter si besoin) :
+
+``` c
+#define MAX_NAME_LEN=16 // longueur maximum d'un nom (voir la description du membre maxNameLen
+```
 ## FAQ
 
-  * Peut-on contrôler ses cartes par d'Internet ?
+  * Peut-on contrôler ses cartes par Internet ?
   
   Rien ne l'empêche, mais c'est un problème de routage, à vous de configurer le nécessaire sur votre routeur/box.
   
