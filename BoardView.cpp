@@ -5,11 +5,11 @@
 
 #if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 
-int (*boardViewParseRequest) (char *request, char *response, unsigned len);
+static int (*boardViewParseRequest) (char *request, char *response, unsigned len);
 
-WebSocketsServer *boardViewWebSocketServer;
-Stream *boardViewRedirectStream;
-unsigned boardViewMaxLineLen;
+static WebSocketsServer *boardViewWebSocketServer;
+static Stream *boardViewRedirectStream;
+static unsigned boardViewMaxLineLen;
 
 static void boardViewEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length){ 
 	
@@ -285,9 +285,9 @@ BoardView::BoardView() {
 	httpPort=80;
 	webSocketPort=8081;
 	tcpPort=8082;
-	boardViewMaxLineLen=200;
 	maxHistoryLines=200;
-	
+	parseRequest=NULL;
+	maxLineLen=200;
 	fontSize=2.0;
 	
 	viewRefreshPeriodMs=200;
@@ -307,6 +307,8 @@ void BoardView::loop() {
 }
 
 void BoardView::begin() { 
+	boardViewMaxLineLen=maxLineLen;
+	boardViewParseRequest=parseRequest;
 		
 	boardViewWebSocketServer = new WebSocketsServer(webSocketPort);
 	httpServer = new ESP8266WebServer(httpPort);

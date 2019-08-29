@@ -13,13 +13,7 @@
 
 //#define BOARD_VIEW_DEBUG 
 
-extern WebSocketsServer *boardViewWebSocketServer;
-extern int (*boardViewParseRequest) (char *request, char *response, unsigned len);
-extern Stream *boardViewRedirectStream;
-extern unsigned boardViewMaxLineLen;
-
 typedef void (*WebSocketServerEvent)(uint8_t num, WStype_t type, uint8_t * payload, size_t length);
-
 
 /*
  * Unique classe définie par le module.
@@ -108,6 +102,8 @@ class BoardView {
 	String mainPage;
 	String consolePage;
 	String viewPage;
+	int (*parseRequest) (char *request, char *response, unsigned len);
+	unsigned maxLineLen;
 	
 	char *name;
 	unsigned maxWidgets;

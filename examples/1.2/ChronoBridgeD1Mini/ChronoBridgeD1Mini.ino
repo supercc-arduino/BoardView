@@ -55,6 +55,7 @@ void setup() {
 	// au demandeur initial.
 	
 	boardView.enabledRedirect(Serial);
+	boardView.maxLineLen=MAX_LINE_LEN;
 	boardView.name="Chrono-nano";	
 	boardView.fontSize=2.0;
 	boardView.viewRefreshPeriodMs=100;
