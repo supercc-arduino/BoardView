@@ -201,7 +201,7 @@ int parseRequest(char *request, char *response, unsigned len) {
 }
 ```
 
-Le code [complet de l'exemple](examples/ChronoD1Mini/ChronoD1Mini.ino). Adaptez le ssid et le mot de passe !
+Le code [complet de l'exemple](examples/1.1/ChronoD1Mini/ChronoD1Mini.ino).
 
 Une fois le programme téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte par le point d'accès (ssid/password) : ``Wifi : IP  addr : 192.168.1.X``
 
@@ -219,9 +219,9 @@ Schéma des branchements, RX arduino vers TX ESP et TX arduino vers RX ESP. Adap
 
 L'idée est simple : on sépare le code en 2 parties
 
-  1. [Code sur la nano](examples/ChronoNano/ChronoNano.ino) : la gestion des capteurs/actionneurs + interpréteur de commandes
+  1. [Code sur la nano](examples/1.2/ChronoNano/ChronoNano.ino) : la gestion des capteurs/actionneurs + interpréteur de commandes
 
-  2. [Code sur la d1-mini](examples/ChronoD1Mini/ChronoD1Mini.ino) (juste en mode "pont" web socket <-> Serial) : création d'un objet BoardView, définition de la vue démarrage en mode "redirection".
+  2. [Code sur la d1-mini](examples/1.2/ChronoBridgeD1Mini/ChronoBridgeD1Mini.ino) (juste en mode "pont" web socket <-> Serial) : création d'un objet BoardView, définition de la vue démarrage en mode "redirection".
 
 Remarques :
   * débranchez le lien série unissant les 2 cartes quand vous téléversez sur l'une ou l'autre.
@@ -337,7 +337,7 @@ La description de la vue est :
 </p>
 
 
-Le code [complet de l'exemple](examples/BangBangD1Mini/BangBangD1Mini.ino). Adaptez le ssid et le mot de passe !
+Le code [complet de l'exemple](examples/1.3/BangBangD1Mini/BangBangD1Mini.ino).
 
 Une fois le programme téléversé, ouvrez la console, passez la vitesse à 115200 bauds, après redémarrage de la carte elle doit afficher l'IP attribuée à votre carte par le point d'accès (ssid/password) : ``Wifi : IP  addr : 192.168.1.X``
 
@@ -354,23 +354,29 @@ Remarques :
 Après avoir créer un objet boardView (`Boardview boardview;`, et **avant** de démarrer les services (`boardView.begin();`) il est nécessaire de le configurer. La configuration dépends des services activés.
 
 ### Congiguation minimale
-|Membres publics| Type | Valeur par défaut | Description |
+|Membres publics| Type | Valeur par défaut |Description |
 |---|---|---|---|
 |maxNameLen|`unsigned`|16|Longueur maximum d'un nom.|
 |name|`char *`|"noname"|Nom de l'objet boardView (réservé pour usage ultérieur).|
 
 ### En mode "redirect"
 
+|Membres publics| Type | Valeur par défaut |Description |
+|---|---|---|---|
 | redirect | `Stream` | `NULL` | Flux où doivent être redirigées les raquête qui arrivent.|
 
 En mode "redirect" la fonction parseRequest n'a pas à être renseignée puisque les requête sont redirigées.
 
 ### En mode normal
 
+|Membres publics| Type | Valeur par défaut |Description |
+|---|---|---|---|
 |parseRequest|`handler`|Fonction d'analyse d'une requête (commande).|
 
 ### La vue sur le navigateur
 
+|Membres publics| Type | Valeur par défaut |Description |
+|---|---|---|---|
 boardView.fontSize | ` float` | 1.0 | font-size HTML attribut. |
 viewRefreshPeriodMs | `int` | 100 | Délais entre 2 rafraichissement de la vue |
 
