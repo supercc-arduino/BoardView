@@ -28,25 +28,25 @@ Exemple d'applications :
   
 Quelques caractéristiques :
 
-  * n'a été testé que sur ESP8266. Projet très jeune, mais les exemples fonctionnent.
+  * n'a été testé que sur ESP8266. Projet très jeune, mais les exemples fonctionnent. A priori rien n'empêche un portage simple (compilation conditionnelle) sur toute carte arduino avec une couche TCP/IP (voir [Portages](#portages)). 
   
-  * utilise un réseau wifi entre les participants supposé existant et acceptant l'intégration des noeuds (cartes). Votre box  fera l'affaire. 
+  * utilise un réseau entre les participants supposé existant et acceptant l'intégration des noeuds (cartes). Dans le cas du Wifi, le point d'accès fourni par votre box fera l'affaire. Dans le cas du filaire, un serveur DHCP (ou une configuration manuelle de l'IP) doit suffire suffit.  
   
-  * dispose d'un logiciel pont, permettant à n'importe qu'elle carte arduino connecté simplement via un port série (UART) à l'ESP8266 de réaliser toutes les opérations décrites dans ce document.
+  * dispose d'un logiciel pont, permettant, après adaptation, à n'importe qu'elle carte arduino connecté simplement via un port série (UART) à l'ESP8266 de réaliser toutes les opérations décrites dans ce document.
 
-  * ne bride en rien les capacité du réseau existant (vos cartes pourront toujours avoir accès à Internet ou à tout autre service si c'était le cas avant).
+  * ne bride en rien les capacités du réseau existant (vos cartes pourront toujours avoir accès à Internet ou à tout autre service si c'était le cas avant).
   
   * Utilise un mini interpréteur de commandes facilement personnalisable. Dans les exemples nous montrons comment une carte peut simplement intégrer du code lui permettant de :
     * rendre accessibles en lecture seule ou en lecture écriture les variables de son choix.
     * rendre accessibles aux autres cartes les fonctions/méthodes de son choix.
   
-  * les cartes peuvent être commandées simulanément via les différents protocoles supportés. Cependant les différentes requêtes arrivant simultanément sur un même noeud seront éxécutées séquentiellement afin d'assurer leur atomicité et palier les problème d'accès concurrents.
+  * les cartes peuvent être commandées simulanément via les différents protocoles supportés. Les différentes requêtes arrivant simultanément sur un même noeud seront cependant éxécutées séquentiellement afin d'assurer leur atomicité et palier les problème d'accès concurrents.
     
-Voir aussi les [##FAQ]
+Voir aussi les [FAQ](#FAQ).
 
-Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interactive via l'usage d'une web socket) et/ou  via une connexion TCP (pour l'automatisation du pilotage/contrôle des cartes par d'autre cartes et/ou avec d'autres programmes (scripts, Ruby, ...) sur PC ou Raspberry PI (et de façon générale sous systèmes POSIX).
+Au niveau du code, BoardView est une classe C++ pour ESP8266 (cf. [Portages](#Portages))permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interactive via l'usage d'une web socket) et/ou  via une connexion TCP (pour l'automatisation du pilotage/contrôle des cartes par d'autre cartes et/ou avec d'autres programmes (scripts, Ruby, ...) sur PC ou Raspberry PI (et de façon générale sous systèmes POSIX).
 
-Via le navigateur web il est possible :
+Via le navigateur Web il est possible :
   * d'obtenir une console réseau (similaire à la console de l'IDE arduino)
   * d'obtenir une vue des variables (int/float/char ``*``) de la carte avec possibilité de les modifier, via une saisie avec clavier ou une checkbox. A cette vue peuvent être ajoutés des boutons qui, s'ils sont cliqués, émettent une (ou plusieurs) commandes à destination de la carte.
   
@@ -436,7 +436,9 @@ Résultats :
 
 (\*) With wifi connexion.
 
+## Portages
 
+En cours de réalisation pour ESP32, Ethernet, UNO Wifi REV2...
 
 ## FAQ
 
