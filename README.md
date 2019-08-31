@@ -429,9 +429,9 @@ Voici la méthode pour obtenir les résultats ci-dessous :
 
 Résultats :
 
-| Memory usage  |  HelloWorld(\*) |  ChronoD1Mini||
+| Memory usage | HelloWorld(\*) | ChronoD1Mini |
 |---|---|---
-| Ram:   |       31324 bytes  |   37332 (+6 Ko)
+| Ram:   |       31324 bytes  |   37332 (+6 Ko) |
 | Flash: |       265951 bytes  |  312218 (+47 Ko) |
 
 (\*) With wifi connexion.
