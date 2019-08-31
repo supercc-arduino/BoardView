@@ -443,6 +443,12 @@ En cours de réalisation pour ESP32, Ethernet, UNO Wifi REV2...
 
 ## FAQ
 
+
+  * Et question sécurité ?
+  Tout dépend du cadre d'utilisation. Boardview n'intègre aucun mécanisme de chiffrement cependant, les exemples ont été conçus dans le cadre d'une connexion au point d'accès Wifi. La sécurité dépend donc de la sécurité de votre point d'accès Wifi. 
+  
+  BoardView a pour vocation de fonctionner aussi sur des "petits" noeuds (UNO Ethernet, Wifi) et plutôt que de chercher a surcharger  les petits arduinos de couches d'authentification et de chiffrement nous avons fait le choix de déporter cette reponsabilité au chiffrement WPA-PSK (AES) de la box (ou autre point d'accès) et si nécessaire aux tunnels ssh (ou SSL, ou VPN  de façon générale) construit coté au dessus si nécessaire.
+  
   * Peut-on contrôler ses cartes par Internet ?
   
   Rien ne l'empêche, mais c'est un problème de routage, à vous de configurer le nécessaire sur votre routeur/box.
