@@ -79,6 +79,8 @@ static void boardViewEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t
 	} 
 } 
 
+#if defined(WEB_SOCKET_SERVER) && defined(HTTP_SERVER)
+
 void BoardView::buildCommon() {
 	
 	header = "<!DOCTYPE html> \n\
@@ -272,44 +274,53 @@ void BoardView::buildViewPage(String &s) {
 	s+="</table>\n";
 	s+=footer;
 }
- 			  
+#endif
+		  
 BoardView::BoardView() {
 	
 	name="noname";
-	
-	maxWidgets=32;
-	widgets=NULL;
-	
-	widgetsCpt=0;
-	boardViewRedirectStream=NULL;
-	httpPort=80;
-	webSocketPort=8081;
-	tcpPort=8082;
-	maxHistoryLines=200;
-	parseRequest=NULL;
 	maxLineLen=200;
-	fontSize=2.0;
+	parseRequest=NULL;
+	boardViewRedirectStream=NULL;
 	
+	tcpPort=8082;
+	
+	#if defined(WEB_SOCKET_SERVER) && defined(HTTP_SERVER)
 	viewRefreshPeriodMs=200;
+	maxWidgets=32;
+	widgets=NULL;	
+	widgetsCpt=0;
+	maxHistoryLines=200;
+	fontSize=2.0;
+	httpPort=80;
+	webSocketPort=8081;	
+	maxHistoryLines=200;
+	fontSize=2.0;	
+	#endif
 	
 }
 
 BoardView::~BoardView() {
+	#if defined(WEB_SOCKET_SERVER) && defined(HTTP_SERVER)
 	delete boardViewWebSocketServer;
 	delete httpServer;
 	for (int i=0; i<widgetsCpt; ++i) delete widgets[i];
 	delete [] widgets;
+	#endif
 }
 
 void BoardView::loop() { 
+	#if defined(WEB_SOCKET_SERVER) && defined(HTTP_SERVER)
 	boardViewWebSocketServer->loop(); 
 	httpServer->handleClient();	
+	#endif
 }
 
 void BoardView::begin() { 
 	boardViewMaxLineLen=maxLineLen;
 	boardViewParseRequest=parseRequest;
-		
+	
+	#if defined(WEB_SOCKET_SERVER) && defined(HTTP_SERVER)	
 	boardViewWebSocketServer = new WebSocketsServer(webSocketPort);
 	httpServer = new ESP8266WebServer(httpPort);
 	
@@ -335,11 +346,14 @@ void BoardView::begin() {
 	
 	boardViewWebSocketServer->onEvent(boardViewEvent);	
 	boardViewWebSocketServer->begin(); 
+	#endif
 }
 
 void BoardView::enabledRedirect(Stream &s) {
 	boardViewRedirectStream=&s;
 }
+
+#if defined(WEB_SOCKET_SERVER) && defined(HTTP_SERVER)
 
 void BoardView::addLabel(char *name) {
 	if (widgets == NULL) widgets = new Widget* [maxWidgets];
@@ -363,5 +377,6 @@ void BoardView::addCheckBox(char *name, char *cmdWhenUnckeck, char *cmdWhenCheck
 	if(widgetsCpt<maxWidgets) 
 		widgets[widgetsCpt++]=new CheckBox(this, name, cmdWhenUnckeck, cmdWhenCheck);
 }
+#endif
 
 #endif

@@ -3,6 +3,8 @@
 
 #define BOARD_VIEW_VERSION "0.1"
 
+#include <BoardViewConfig.h>
+
 #if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 
 #include <ESP8266WiFi.h>
@@ -16,71 +18,79 @@
 typedef void (*WebSocketServerEvent)(uint8_t num, WStype_t type, uint8_t * payload, size_t length);
 
 /*
- * Unique classe définie par le module.
- * gère un serveur http et un serveur webSocket
- *
+ * BoardView : multi servers manager.
+ * 
+ *   * WebSocket + HTTP
+ *   * (TCP)
+ *   * (UDP)
+ *   * (MULTICAST UDP)
+ * 
+ *   Client part in BoardViewProto.h
+ * 
  * */
-
+ 
 class BoardView {
+	
+	public:
+	
+	int (*parseRequest) (char *request, char *response, unsigned len);
+	unsigned maxLineLen;
+	
+	char *name;
+	
+	
+	unsigned tcpPort;
+	
 	
 	private :
 	
+	#if defined(WEB_SOCKET_SERVER) && defined(HTTP_SERVER)
+
+	
 	// widgets internal class
 	
-	class Widget {
-		protected :
-		
+	struct Widget {
 		String name;
 		BoardView *parent;
-		
-		public:
-		
 		Widget(BoardView *parent, String name) : parent(parent), name(name) { }
 		virtual String toHtml()=0;
 	};
 	
-	class Label : public Widget {
-		public :
+	struct Label : public Widget {
 		Label(BoardView *parent, String name) : Widget(parent, name) {}		
 		String toHtml() {
-			return "<td style='font-size:"+String(parent->fontSize)+"rem'>"+(String)name+"</td><td>"+"<input id=\""+name+"\" type=\"text\" style='font-size:"+String(parent->fontSize)+"rem; width:70%' readonly ></td>";
+			return "<td style='font-size:"+String(parent->fontSize)+"rem'>"+
+				(String)name+"</td><td>"+"<input id=\""+name+
+				"\" type=\"text\" style='font-size:"+
+				String(parent->fontSize)+"rem; width:70%' readonly ></td>";
 		}
 	};
 	
-	class Entry : public Widget {
-		
-		public :
-		
+	struct Entry : public Widget {
 		Entry(BoardView *parent, String name) : Widget(parent, name) {}
-		
 		String toHtml() {
-			return "<td style='font-size:"+String(parent->fontSize)+"rem'>"+(String)name+"</td><td style='font-size:"+String(parent->fontSize)+"%'>"+"<input id=\""+name+"\" type=\"text\" style='width:70%; font-size:"+String(parent->fontSize)+"rem' onClick=\"promptForInput('"+name+"');\" readonly></td>";
+			return "<td style='font-size:"+String(parent->fontSize)+
+				"rem'>"+(String)name+"</td><td style='font-size:"+
+				String(parent->fontSize)+"%'>"+"<input id=\""+name+
+				"\" type=\"text\" style='width:70%; font-size:"+
+				String(parent->fontSize)+
+				"rem' onClick=\"promptForInput('"+name+"');\" readonly></td>";
 		}	
 	};
 	
-	class Button : public Widget {
-		
+	struct Button : public Widget {
 		String cmd;
-		
-		public :
-		
 		Button(BoardView *parent, String name, String cmd) : Widget(parent, name), cmd(cmd) {}
-		
 		String toHtml() {
 			return "<td colspan=2><input type=\"button\" style='font-size:"+
 			String(parent->fontSize)+"rem' onclick=\"buttonPressed('"+cmd+"');\" value='"+name+"'></td>";
 		}	
 	};
 	
-	class CheckBox : public Widget {
-		
+	struct CheckBox : public Widget {
 		String cmdWhenUncheck, cmdWhenCheck;
-		
-		public :
-		
 		CheckBox(BoardView *parent, String name, String cmdWhenUncheck, String cmdWhenCheck) : 
 			Widget(parent, name), cmdWhenUncheck(cmdWhenUncheck), cmdWhenCheck(cmdWhenCheck) {}
-		
 		String toHtml() {
 			return "\n<td><label for='"+name+"' style='font-size:"+
 				String(parent->fontSize)+"rem'>"+name+"</label></td>" \
@@ -88,6 +98,7 @@ class BoardView {
 				onclick=\"checkPressed('"+name+"', '"+cmdWhenUncheck+"', '"+cmdWhenCheck+"');\"></td>";
 		}	
 	};
+	
 	
 	unsigned widgetsCpt;
 	BoardView::Widget **widgets;
@@ -102,17 +113,22 @@ class BoardView {
 	String mainPage;
 	String consolePage;
 	String viewPage;
-	int (*parseRequest) (char *request, char *response, unsigned len);
-	unsigned maxLineLen;
 	
-	char *name;
 	unsigned maxWidgets;
 	unsigned viewRefreshPeriodMs;
 	unsigned maxHistoryLines;
 	float fontSize;
 
-	unsigned httpPort, webSocketPort, tcpPort;
+	unsigned httpPort;
+	unsigned webSocketPort;
+	
+	
     ESP8266WebServer *httpServer;
+	#endif
+	
+	
+	public :
+	
 	BoardView();
 
 	~BoardView();
