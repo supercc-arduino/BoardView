@@ -8,10 +8,12 @@ WARNING, la doc est en avance par rapport au code. Le code de TCP n'est pas enco
   - [La vue](#la-vue)
   - [Le langage de commandes](#le-langage-de-commandes)
   - [Exemples d'interactions via le navigateur](#exemples-d&apos;interactions-via-le-navigateur)
-    - [Exemple 1.1 : Un chronomètre.](#exemple-11--un-chronomètre)
+    - [Exemple 1.1 : Un chronomètre](#exemple-11--un-chronomètre)
     - [Exemple 1.2 : Le chronomètre déporté sur une nano](#exemple-12--le-chronomètre-déporté-sur-une-nano)
     - [Exemple 1.3 : Un asservissement tout ou rien](#exemple-13--un-asservissement-tout-ou-rien)
   - [Configuration d'un objet boardView](#configuration-d&apos;un-objet-boardView)
+  - [Tests](#Tests)
+    - [Utilisation mémoire](#utilisation-mémoire)
   - [FAQ](#FAQ)
 
 ## Introduction
@@ -387,6 +389,38 @@ En début du fichier BoardView.h sont définies les constantes suivantes (à ada
 ``` c
 #define MAX_NAME_LEN=16 // longueur maximum d'un nom (voir la description du membre maxNameLen
 ```
+
+## Tests
+
+Les exemples fonctionnent mais BoardView est un projet jeune.
+
+### Utilisation mémoire
+
+Sur petites architectures il est important d'estimer et de contrôler la taille du code et des données embarquées. 
+
+BoardView est composé de plusieurs parties (différents protocoles) qu'il est possible ou pas d'inclure à la compilation (cf. BoardViewConfig.h).
+
+Tous les protocoles ne sont pas logés à la même enseigne. Le plus gourmant est clairement la communication via les WebSockets principalement en raison du serveur Wen (et de ses pages) qu'il est nécessaire d'intégrer. Les pages étant générées à l'aide de String vous devrez, si vous utilisez les Websockets, surveiller l'usage du tas (heap).
+
+Le protocole TCP quand à lui est très économe...
+
+Voici la méthode pour obtenir les résultats ci-dessous :
+1. conpiler HelloWorld. Ce HelloWorld inclu l'association au point d'accès wifi ainsi que l'écriture via Serial. Les différence de taille calculée sont par rapport à cet exemple base.
+
+2. Compiler ChronoD1Mini. Ce programme utilise les WebSockets
+
+3. ...
+
+Résultats :
+
+Memory usage    HelloWorld(\*)   ChronoD1Mini    
+  Ram:          31324 bytes     37332 (+6 Ko)
+  Flash:        265951 bytes    312218 (+47 Ko)
+
+(\*) With wifi connexion.
+
+
+
 ## FAQ
 
   * Peut-on contrôler ses cartes par Internet ?
