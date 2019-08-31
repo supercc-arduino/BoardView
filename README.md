@@ -18,7 +18,7 @@ WARNING, la doc est en avance par rapport au code. Le code de TCP n'est pas enco
 
 ## Introduction
 
-L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir maîtriser complètement les aspects techniques des protocoles réseaux de la famille TCP/IP utilisés (HTTP, WebSocket, TCP). 
+L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir rentrer dans les détails de mise en oeuvre des protocoles réseaux de la famille TCP/IP utilisés (HTTP, WebSocket, TCP). 
 
 Exemple d'applications :
   * Un contrôle interactif de ses cartes avec son smartphone (connecté au point d'accès partagé par les noeuds).
@@ -30,16 +30,18 @@ Quelques caractéristiques :
 
   * n'a été testé que sur ESP8266. Projet très jeune, mais les exemples fonctionnent.
   
-  * utilise un réseau wifi entre les participants supposé existant et acceptant l'intégration des noeuds (cartes). Une box domestique fait l'affaire. 
+  * utilise un réseau wifi entre les participants supposé existant et acceptant l'intégration des noeuds (cartes). Votre box  fera l'affaire. 
   
-  * dispose d'un logiciel pont, permettant à n'importe qu'elle carte arduino connecté simplement via un port série (UART) à l'ESP8266 de réaliser toutes les opérations.
+  * dispose d'un logiciel pont, permettant à n'importe qu'elle carte arduino connecté simplement via un port série (UART) à l'ESP8266 de réaliser toutes les opérations décrites dans ce document.
 
   * ne bride en rien les capacité du réseau existant (vos cartes pourront toujours avoir accès à Internet ou à tout autre service si c'était le cas avant).
   
-  * Utilise un mini interpréteur de commandes facilement personnalisable.
+  * Utilise un mini interpréteur de commandes facilement personnalisable. Dans les exemples nous montrons comment une carte peut simplement intégrer du code lui permettant de :
+    * rendre accessibles en lecture seule ou en lecture écriture les variables de son choix.
+    * rendre accessibles aux autres cartes les fonctions/méthodes de son choix.
   
-  * les cartes peuvent être commandées simulanément via les différents protocoles supportés. Cependant les différentes requêtes arrivant simultanément sur un même noeud seront éxécutées séquentiellement (dans un ordre indéterminé) afin d'assurer leur atomicité.
-  
+  * les cartes peuvent être commandées simulanément via les différents protocoles supportés. Cependant les différentes requêtes arrivant simultanément sur un même noeud seront éxécutées séquentiellement afin d'assurer leur atomicité et palier les problème d'accès concurrents.
+    
 Voir aussi les [##FAQ]
 
 Au niveau du code, BoardView est une classe C++ pour ESP8266 permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interactive via l'usage d'une web socket) et/ou  via une connexion TCP (pour l'automatisation du pilotage/contrôle des cartes par d'autre cartes et/ou avec d'autres programmes (scripts, Ruby, ...) sur PC ou Raspberry PI (et de façon générale sous systèmes POSIX).
@@ -48,19 +50,11 @@ Via le navigateur web il est possible :
   * d'obtenir une console réseau (similaire à la console de l'IDE arduino)
   * d'obtenir une vue des variables (int/float/char ``*``) de la carte avec possibilité de les modifier, via une saisie avec clavier ou une checkbox. A cette vue peuvent être ajoutés des boutons qui, s'ils sont cliqués, émettent une (ou plusieurs) commandes à destination de la carte.
   
-Via la connexion TCP il possible :
-  * d'émettre toute commande à destination de tout autre carte/noeud (possédant un objet de type BoardView)
+Via la connexion TCP il possible d'émettre toute commande à destination de tout autre carte/noeud (possédant un objet de type BoardView) :
     * à partir d'une carte via la fonction tcpRequest fournie.
     * à partir d'un système POSIX, via la commande tcpRequest fournie
 
-Pour fonctionner avec BoardView l'application doit intégrer la capacité à traiter des commandes simples. Ces commandes seront émises par d'autres programmes ou par le navigateur quand l'utilisateur interagira avec les widgets. 
 
-Ce langage de commandes est complètement définissable par l'utilisateur et les exemples fournis plus bas implémentent tous un mini interpréteur de commandes. Ils peuvent vous servir de modèles dans un premier temps.
-
-Cependant des constantes reviennent dans le langage de commandes :
-  * donner accès en lecture à une de ses variables
-  * idem mais en lecture/écriture
-  * donner accès à une fonction (la capacité de déclencher la fonction).
 
 Dans l'image ci-dessous une capacité intégrée (mais facultative) à BoardView : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquants des arduinos qui ne le sont pas à la base : le d1-mini ne sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
 
@@ -115,7 +109,15 @@ Un aperçu de la vue de l'exemple n°1 :
  
 ## Le langage de commandes
 
-BoardView est conçu pour des échanges à base de commandes. Une commande est de la forme :
+Pour fonctionner avec BoardView l'application doit intégrer la capacité à traiter des commandes simples. Ces commandes seront émises par d'autres programmes ou par le navigateur quand l'utilisateur interagira avec les widgets. 
+
+Ce langage de commandes est complètement définissable par l'utilisateur et les exemples fournis plus bas implémentent tous un mini interpréteur de commandes. Ils peuvent vous servir de modèles dans un premier temps.
+
+Les constantes de base dans le langage de commandes sont :
+  * donner accès en lecture (ou lecture/écriture) à une ou plusieurs de ses variables
+  * donner accès à une fonction/méthode (la capacité de déclencher la fonction/méthode).
+ 
+Une commande est de la forme :
 
 ``cmd arg1 arg2 ... argN``
 
@@ -127,7 +129,7 @@ Ou (à cause du signe = difficilement accessible à partir d'un clavier virtuel 
 
 ``varname value``
 
-Le nœud destinataire d'une commande construira la réponse, également sous la forme d'une unique ligne, qu'il retournera à l'émetteur de la commande. Cela peut être un résultat, ou juste l'information que la commande s'est correctement déroulée ("ok") ou pas ("erreur : code ou message...")
+Le noeud destinataire d'une commande construira la réponse, également sous la forme d'une unique ligne, qu'il retournera à l'émetteur de la commande. Cela peut être un résultat, ou juste l'information que la commande s'est correctement déroulée ("ok") ou pas ("erreur : code ou message...")
 
 La première (et éventuellement la seule) commande que doit être capable d'interpréter un noeud est la commande :
 
@@ -353,6 +355,32 @@ Remarques :
 
 ## Configuration d'un objet boardView
 
+### A la compilation
+
+Sur petites architectures il est important d'estimer et de contrôler la taille du code et des données embarquées. 
+
+BoardView est composé de plusieurs parties (différents protocoles) qu'il est possible ou pas d'inclure à la compilation (cf. BoardViewConfig.h).
+
+```c
+// select servers codes
+
+#define WEB_SOCKET_SERVER
+#define HTTP_SERVER
+#define TCP_SERVER
+```
+
+Tous les protocoles ne sont pas logés à la même enseigne. Le plus gourmant est clairement la communication via les WebSockets principalement en raison du serveur Web (et de ses pages) qu'il est nécessaire d'intégrer. Les pages étant générées à l'aide de String vous devrez, si vous utilisez les Websockets, surveiller l'usage du tas (heap).
+
+Le protocole TCP quand à lui est très économe...
+
+**Si vous n'utilisez pas tous les types de serveurs proposés, commentez les ``#define *_SERVER`` pour que ses variables statiques ne soient pas inétgrer au code.
+
+D'autres "constantes" sont définies dans ``BoardViewConfig.h`` (et donc à adapter si besoin) :
+
+``` c
+#define MAX_NAME_LEN=16 // longueur maximum d'un nom (voir la description du membre maxNameLen.
+```
+
 Après avoir créer un objet boardView (`Boardview boardview;`, et **avant** de démarrer les services (`boardView.begin();`) il est nécessaire de le configurer. La configuration dépends des services activés.
 
 ### Congiguation minimale
@@ -382,14 +410,6 @@ En mode "redirect" la fonction parseRequest n'a pas à être renseignée puisque
 boardView.fontSize | ` float` | 1.0 | font-size HTML attribut. |
 viewRefreshPeriodMs | `int` | 100 | Délais entre 2 rafraichissement de la vue |
 
-## Constantes
-
-En début du fichier BoardView.h sont définies les constantes suivantes (à adapter si besoin) :
-
-``` c
-#define MAX_NAME_LEN=16 // longueur maximum d'un nom (voir la description du membre maxNameLen
-```
-
 ## Tests
 
 Les exemples fonctionnent mais BoardView est un projet jeune.
@@ -398,24 +418,21 @@ Les exemples fonctionnent mais BoardView est un projet jeune.
 
 Sur petites architectures il est important d'estimer et de contrôler la taille du code et des données embarquées. 
 
-BoardView est composé de plusieurs parties (différents protocoles) qu'il est possible ou pas d'inclure à la compilation (cf. BoardViewConfig.h).
 
-Tous les protocoles ne sont pas logés à la même enseigne. Le plus gourmant est clairement la communication via les WebSockets principalement en raison du serveur Wen (et de ses pages) qu'il est nécessaire d'intégrer. Les pages étant générées à l'aide de String vous devrez, si vous utilisez les Websockets, surveiller l'usage du tas (heap).
-
-Le protocole TCP quand à lui est très économe...
 
 Voici la méthode pour obtenir les résultats ci-dessous :
-1. conpiler HelloWorld. Ce HelloWorld inclu l'association au point d'accès wifi ainsi que l'écriture via Serial. Les différence de taille calculée sont par rapport à cet exemple base.
+1. compiler HelloWorld. Ce HelloWorld inclu l'association au point d'accès wifi ainsi que l'écriture via Serial. Les différences de tailles calculées sont par rapport à cet exemple de base.
 
-2. Compiler ChronoD1Mini. Ce programme utilise les WebSockets
+2. Compiler ChronoD1Mini. Ce programme utilise les WebSockets.
 
 3. ...
 
 Résultats :
 
-Memory usage    HelloWorld(\*)   ChronoD1Mini    
-  Ram:          31324 bytes     37332 (+6 Ko)
-  Flash:        265951 bytes    312218 (+47 Ko)
+| Memory usage  |  HelloWorld(\*) |  ChronoD1Mini||
+|---|---|---
+| Ram:   |       31324 bytes  |   37332 (+6 Ko)
+| Flash: |       265951 bytes  |  312218 (+47 Ko) |
 
 (\*) With wifi connexion.
 
