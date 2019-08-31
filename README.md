@@ -14,6 +14,7 @@ WARNING, la doc est en avance par rapport au code. Le code de TCP n'est pas enco
   - [Configuration d'un objet boardView](#configuration-d&apos;un-objet-boardView)
   - [Tests](#Tests)
     - [Utilisation mémoire](#utilisation-mémoire)
+  - [Portages](#portages)
   - [FAQ](#FAQ)
 
 ## Introduction
