@@ -64,11 +64,11 @@ Dans l'image ci-dessous une capacité intégrée (mais facultative) à BoardView
 
 ## Note importante sur les exemples
 
-> ⚠️ **Warning**: Les #define suivants sont supposés être dans le fichier ``boardViewPrefs.h`` :
+> ⚠️ **Warning**: Les #define suivants sont supposés être dans le fichier ``boardViewPrivate.h`` :
 
 ``` c
-#define SSID "wifi-ssid"
-#define PASSWORD "wifi-password"
+#define WIFI_SSID "YOUR-WIFI-SSID"
+#define WIFI_PASSWORD "YOUR-WIFI-PASSWORD"
 ```
 
 Il vous faudra soit les définir dans le fichier soit les définir directement dans votre programme.

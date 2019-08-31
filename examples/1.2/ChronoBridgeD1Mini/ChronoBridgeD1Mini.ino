@@ -11,7 +11,7 @@
 // Connexion wifi
 
 /*
- * Définissez WIFI_SSID et WIFI_PASSWORD dans le fichier private.h ou 
+ * Définissez WIFI_SSID et WIFI_PASSWORD dans le fichier BoardViewPrivate.h ou 
  * définissez les dans ce fichier et commentez l'inclusion.
  * 
  * Set WIFI_SSID and WIFI_PASSWORD in the prefs.h file or set them in 
@@ -22,7 +22,7 @@
  * 
  * */
 
-#include "private.h"
+#include "BoardViewPrivate.h"
 
 // Objet boardView, utilisé pour les communications.
 
