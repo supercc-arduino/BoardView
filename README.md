@@ -379,12 +379,12 @@ Le protocole TCP quand à lui est très économe...
 D'autres "constantes" sont définies dans ``BoardViewConfig.h`` (et donc à adapter si besoin) :
 
 ``` c
-#define MAX_NAME_LEN=16 // longueur maximum d'un nom (voir la description du membre maxNameLen.
+#define MAX_NAME_LEN=16 // longueur maximum d'un nom.
 ```
 
 Après avoir créer un objet boardView (`Boardview boardview;`, et **avant** de démarrer les services (`boardView.begin();`) il est nécessaire de le configurer. La configuration dépends des services activés.
 
-### Congiguation minimale
+### Configuation minimale
 |Membres publics| Type | Valeur par défaut |Description |
 |---|---|---|---|
 |maxNameLen|`unsigned`|16|Longueur maximum d'un nom.|
