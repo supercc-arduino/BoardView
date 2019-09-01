@@ -3,7 +3,6 @@
 // source originelle : 
 // https://www.hackster.io/brzi/nodemcu-websockets-tutorial-3a2013
 
-#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
 
 static int (*boardViewParseRequest) (char *request, char *response, unsigned len);
 
@@ -312,9 +311,46 @@ BoardView::~BoardView() {
 void BoardView::loop() { 
 	#if defined(WEB_SOCKET_SERVER) && defined(HTTP_SERVER)
 	boardViewWebSocketServer->loop(); 
-	httpServer->handleClient();	
+	//httpServer->handleClient();
+	httpServer->loop();	
 	#endif
 }
+
+void BoardView::printWithHeader(TcpClient &client, String &s) {
+	client.println("HTTP/1.1 200 OK");
+	client.println("Content-type:text/html");
+	client.println();
+	client.println(s);
+}
+
+void BoardView::urlHook(TcpClient &client, char *url) {
+	if(!strcmp(url, "/index.html") || !strcmp(url, "/")) {
+		buildCommon();
+		buildMainPage(mainPage);
+		printWithHeader(client, mainPage);		
+	}
+	
+	else if (!strcmp(url, "/console.html")) {
+		buildCommon();
+		buildConsolePage(consolePage);
+		printWithHeader(client, consolePage);		
+	}
+	
+	else if (!strcmp(url, "/view.html")) {
+		buildCommon();
+		buildViewPage(viewPage);
+		printWithHeader(client, viewPage);		
+	}
+	
+	else {
+		client.println("HTTP/1.1 404 Not found !");
+		client.println("Content-type:text/html");
+		client.println();
+		client.println("<html><body><h1>Not found !</h1></body></html>");
+		client.println();
+	}
+}
+
 
 void BoardView::begin() { 
 	boardViewMaxLineLen=maxLineLen;
@@ -322,27 +358,10 @@ void BoardView::begin() {
 	
 	#if defined(WEB_SOCKET_SERVER) && defined(HTTP_SERVER)	
 	boardViewWebSocketServer = new WebSocketsServer(webSocketPort);
-	httpServer = new ESP8266WebServer(httpPort);
 	
-	httpServer->on("/", [&]() {
-		buildCommon();
-		buildMainPage(mainPage);
-		httpServer->send(200, "text/html", mainPage);
-	});
+	httpServer = new MiniWebServer(httpPort, this);
 	
-	httpServer->on("/console.html", [&]() {
-		buildCommon();
-		buildConsolePage(consolePage);
-		httpServer->send(200, "text/html", consolePage);
-	});
-	
-	httpServer->on("/view.html", [&]() {
-		buildCommon();
-		buildViewPage(viewPage);
-		httpServer->send(200, "text/html", viewPage);
-	});
-	
-	httpServer->begin();
+	Serial.println("MiniWebServer started.");
 	
 	boardViewWebSocketServer->onEvent(boardViewEvent);	
 	boardViewWebSocketServer->begin(); 
@@ -377,6 +396,51 @@ void BoardView::addCheckBox(char *name, char *cmdWhenUnckeck, char *cmdWhenCheck
 	if(widgetsCpt<maxWidgets) 
 		widgets[widgetsCpt++]=new CheckBox(this, name, cmdWhenUnckeck, cmdWhenCheck);
 }
-#endif
+
+
+// MiniWebServer 
+
+MiniWebServer::MiniWebServer(unsigned port, BoardView *boardView) : port(port), boardView(boardView) {
+	server=new TcpServer(port); 
+	server->begin();
+}
+
+MiniWebServer::~MiniWebServer() {
+	delete server;
+}
+
+
+void MiniWebServer::loop() {
+
+	TcpClient client;
+	char line[60];
+	char url[20];
+	int n;
+	
+	while(client=server->available()) {
+		
+		// lecture de la requête
+		
+		while(n=client.readBytesUntil('\n', line, 60)) {
+			line[n]=0;
+			
+			if(!strncmp(line, "GET", 3)) {
+				char *s=line+4;
+				char *e=s;
+				while(*e != ' ' && *e) ++e;
+				*e=0; 
+				strcpy(url, s);
+			}
+				 			
+			if(strlen(line)<3) break;
+		}
+		
+		// send response
+
+		boardView->urlHook(client, url);	
+	}	
+	client.stop();
+			
+}
 
 #endif

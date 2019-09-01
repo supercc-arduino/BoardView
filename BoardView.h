@@ -5,17 +5,57 @@
 
 #include <BoardViewConfig.h>
 
-#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32)
+
+#if defined(ARDUINO_ARCH_ESP32)
+
+#include <WiFi.h>
+#include <WebServer.h>
+#define TcpClient WiFiClient
+#define TcpServer WiFiServer
+
+#elif defined(ARDUINO_ARCH_ESP8266)
 
 #include <ESP8266WiFi.h>
+#define TcpClient WiFiClient
+#define TcpServer WiFiServer
+
+#elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
+
+#include <WiFiNINA.h>
+#define TcpClient WiFiClient
+#define TcpServer WiFiServer
+
+#else // UNO W5100
+
+#include <Ethernet.h>
+#define TcpClient EthernetClient
+#define TcpServer EthernetServer
+
+#endif
+
+#ifdef WEB_SOCKET_SERVER
 #include <WebSocketsServer.h>
-#include <ESP8266WebServer.h>
+#endif
+
+
+#define WITH_NET // Before include BoardViewProto.h
 
 #include <BoardViewProto.h>
 
 //#define BOARD_VIEW_DEBUG 
 
 typedef void (*WebSocketServerEvent)(uint8_t num, WStype_t type, uint8_t * payload, size_t length);
+
+class BoardView;
+
+struct MiniWebServer {
+		TcpServer *server;
+		BoardView *boardView;
+		unsigned port;
+	    MiniWebServer(unsigned port, BoardView *boardView);
+	    ~MiniWebServer();
+		void loop();
+};
 
 /*
  * BoardView : multi servers manager.
@@ -121,12 +161,11 @@ class BoardView {
 
 	unsigned httpPort;
 	unsigned webSocketPort;
-	
-	
-    ESP8266WebServer *httpServer;
+		
+    MiniWebServer *httpServer;
+    
 	#endif
-	
-	
+		
 	public :
 	
 	BoardView();
@@ -143,6 +182,9 @@ class BoardView {
 	
 	void onEvent(WebSocketServerEvent cbEvent);
 	void enabledRedirect(Stream &s);
+	
+	void printWithHeader(TcpClient &client, String &s);
+	void urlHook(TcpClient &, char*);
 
 	void addLabel(char *name);
 	void addEntry(char *name);
@@ -152,5 +194,4 @@ class BoardView {
 
 #endif
 
-#endif
 
