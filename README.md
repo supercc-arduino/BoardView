@@ -46,7 +46,7 @@ Quelques caractéristiques :
     
 Voir aussi les [FAQ](#FAQ).
 
-Au niveau du code, BoardView est une classe C++ pour ESP8266 (cf. [Portages](#Portages))permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interactive via l'usage d'une web socket) et/ou  via une connexion TCP (pour l'automatisation du pilotage/contrôle des cartes par d'autre cartes et/ou avec d'autres programmes (scripts, Ruby, ...) sur PC ou Raspberry PI (et de façon générale sous systèmes POSIX).
+Au niveau du code, BoardView est une classe C++ pour initialement pour ESP8266 (cf. [Portages](#Portages))permettant de communiquer avec vos cartes arduinos à l'aide d'un navigateur Web (de façon interactive via l'usage d'une web socket) et/ou  via une connexion TCP (pour l'automatisation du pilotage/contrôle des cartes par d'autre cartes et/ou avec d'autres programmes (scripts, Ruby, ...) sur PC ou Raspberry PI (et de façon générale sous systèmes POSIX).
 
 Via le navigateur Web il est possible :
   * d'obtenir une console réseau (similaire à la console de l'IDE arduino)
@@ -55,8 +55,6 @@ Via le navigateur Web il est possible :
 Via la connexion TCP il possible d'émettre toute commande à destination de tout autre carte/noeud (possédant un objet de type BoardView) :
     * à partir d'une carte via la fonction tcpRequest fournie.
     * à partir d'un système POSIX, via la commande tcpRequest fournie
-
-
 
 Dans l'image ci-dessous une capacité intégrée (mais facultative) à BoardView : faire une redirection de commandes (et de leurs réponses) via un port série afin de rendre communiquants des arduinos qui ne le sont pas à la base : le d1-mini ne sert que de pont vers un arduino (nano ici). Décrit dans l'exemple n°2.
 
