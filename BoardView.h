@@ -9,7 +9,6 @@
 #if defined(ARDUINO_ARCH_ESP32)
 
 #include <WiFi.h>
-#include <WebServer.h>
 #define TcpClient WiFiClient
 #define TcpServer WiFiServer
 
@@ -25,7 +24,7 @@
 #define TcpClient WiFiClient
 #define TcpServer WiFiServer
 
-#else // UNO W5100
+#else // Ethernet 
 
 #include <Ethernet.h>
 #define TcpClient EthernetClient

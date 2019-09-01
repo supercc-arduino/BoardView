@@ -16,10 +16,11 @@ WARNING, la doc est en avance par rapport au code. Le code de TCP n'est pas enco
     - [Utilisation mémoire](#utilisation-mémoire)
   - [Portages](#portages)
   - [FAQ](#FAQ)
+  - [Licence](#Licence)
 
 ## Introduction
 
-L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à ceux qui veulent faire de la communication réseau avec leurs arduinos sans vouloir rentrer dans les détails de mise en oeuvre des protocoles réseaux de la famille TCP/IP utilisés (HTTP, WebSocket, TCP). 
+L'idée de BoardView est d'offrir des fonctions/classes "Réseaux" facilement accessibles à ceux qui veulent faire de la communication réseau avec leurs arduinos sans trop rentrer dans les détails de la mise en oeuvre des protocoles réseaux de la famille TCP/IP utilisés (HTTP, WebSocket, TCP). 
 
 Exemple d'applications :
   * Un contrôle interactif de ses cartes avec son smartphone (connecté au point d'accès partagé par les noeuds).
@@ -33,7 +34,7 @@ Quelques caractéristiques :
   
   * utilise un réseau entre les participants supposé existant et acceptant l'intégration des noeuds (cartes). Dans le cas du Wifi, le point d'accès fourni par votre box fera l'affaire. Dans le cas du filaire, un serveur DHCP (ou une configuration manuelle de l'IP) doit suffire suffit.  
   
-  * dispose d'un logiciel pont, permettant, après adaptation, à n'importe qu'elle carte arduino connecté simplement via un port série (UART) à l'ESP8266 de réaliser toutes les opérations décrites dans ce document.
+  * dispose d'un logiciel pont, permettant, après adaptation, à n'importe qu'elle carte arduino connecté simplement via un port série (UART) à  no "réseau" de réaliser toutes les opérations décrites dans ce document.
 
   * ne bride en rien les capacités du réseau existant (vos cartes pourront toujours avoir accès à Internet ou à tout autre service si c'était le cas avant).
   
@@ -439,19 +440,34 @@ Résultats :
 
 ## Portages
 
-En cours de réalisation pour ESP32, Ethernet, UNO Wifi REV2...
+Normalement le code est compatible :
+
+  * ESP32,
+  * ESP8266 
+  * UNO Wifi REV2
+  * Ethernet (UNO, ... + W5100, ...)
+
+N'ayant pas le matériel a disposition le code est testé uniquement 8266 (d1-mini). Aussi faites remonter vos tests (positifs ou négatifs) que je maintienne ce tableau à jour:
+
+| Architecture | Fonctionne ? | Remarque |
+|---|---|---|
+| ESP32 | pas testé | |
+| ESP8266 | oui | Juste mes tests perso pour l'instant. |
+| UNO Wifi REV2 | pas testé | |
+| Ethernet (UNO, ... + W5100, ...) | pas testé | |
 
 ## FAQ
 
-
   * Et question sécurité ?
   
-  Tout dépend du cadre d'utilisation. Boardview n'intègre aucun mécanisme de chiffrement cependant, les exemples ont été conçus dans le cadre d'une connexion au point d'accès Wifi. La sécurité dépend donc de la sécurité de votre point d'accès Wifi. 
+Tout dépend du cadre d'utilisation. Boardview n'intègre aucun mécanisme de chiffrement cependant, les exemples ont été conçus dans le cadre d'une connexion au point d'accès Wifi. La sécurité dépend donc de la sécurité de votre point d'accès Wifi. 
   
-  BoardView a pour vocation de fonctionner aussi sur des "petits" noeuds (UNO Ethernet, Wifi) et plutôt que de chercher a surcharger  les petits arduinos de couches d'authentification et de chiffrement nous avons fait le choix de déporter cette reponsabilité au chiffrement WPA2 de la box (ou autre point d'accès) et si nécessaire aux tunnels ssh (ou SSL, ou VPN  de façon générale) construit coté au dessus si nécessaire.
+BoardView a pour vocation de fonctionner aussi sur des "petits" noeuds (UNO Ethernet, Wifi) et plutôt que de chercher a surcharger  les petits arduinos de couches d'authentification et de chiffrement nous avons fait le choix de déporter cette reponsabilité au chiffrement WPA2 de la box (ou autre point d'accès) et si nécessaire aux tunnels ssh (ou SSL, ou VPN  de façon générale) construit coté au dessus si nécessaire.
   
   * Peut-on contrôler ses cartes par Internet ?
   
-  Rien ne l'empêche, mais c'est un problème de routage, à vous de configurer le nécessaire sur votre routeur/box.
+Rien ne l'empêche, mais c'est un problème de routage, à vous de configurer le nécessaire sur votre routeur/box.
   
-  
+## Licence 
+
+[GPL v3.0](https://github.com/supercc-arduino/BoardView/blob/master/LICENSE).
